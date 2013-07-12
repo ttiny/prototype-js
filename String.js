@@ -165,7 +165,7 @@ if ( String.prototype.startsWith === undefined ) {
 		writable: false,
 		value: function ( searchString, position ) {
 			position = position || 0;
-			if ( this.length <= position + searchString.length ) {
+			if ( this.length < position + searchString.length ) {
 				return false;
 			}
 			return this.indexOf( searchString, position ) === position;
