@@ -12,3 +12,7 @@ TODO
 * `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`
 * `Object.mergeDeep()`
 * `Array.merge()` (alias for `.concat()` for consistency and for `.mergeDeep()`)
+* `RegExp.matchRecursive()`
+* `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset lastIndex for even new strings.
+This will save the lastIndex and reset it so the regexp can be reused safely without losing current position.
+* `RegExp.resetIndex()`
