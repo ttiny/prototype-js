@@ -60,18 +60,12 @@ Unitest( 'Function.defineStatic()', function () {
 } );
 /*UNITESTS@*/
 
-/**
- * Will make functions's prototype to inherit from given parent's prototype.
- * @def static function Function.extend ( class, parent )
- * @param function
- * @return this
- */
 
 /**
  * Will make functions's prototype to inherit from given parent's prototype.
  * @def static function Function.extend ( parent, prototype )
- * @param function
- * @param object Prototype for the class itself.
+ * @param Function
+ * @param Object|undefined Prototype for the class itself.
  * @return this
  */
 Object.defineProperty( Function.prototype, 'extend', { 
@@ -129,18 +123,56 @@ Unitest( 'Function.extend()', function () {
 /*UNITESTS@*/
 
 /**
+Passed as last argument to {@see Function.mixin()} to resolve conflicts.
+```javascript
+A.mixin( B, C, ResolveMixins( { 'overlappingMember':  B } ) );
+```
+@def function ResolveMixins ( resolve:Object )
+*/
+function ResolveMixins ( resolve ) {
+	if ( !(this instanceof ResolveMixins) ) {
+		return new ResolveMixins( resolve );
+	}
+	this.merge( resolve );
+}
+
+/**
  * Mixes the prototype of another function into the prototype of this function.
  * Notice that other function's prototype must have some enumerable properties,
- * which means the can not be defined using {@see Function.define() .define()}
- * @def static function Function.mixin( anotherFunction )
- * @param function
+ * which means they can not be defined using {@see Function.define() .define()}
+ * @def static function Function.mixin( mixinPrototype, ... )
+ * @param Object
  * @return this
  */
 Object.defineProperty( Function.prototype, 'mixin', { 
-	value: function ( otherklass ) {
-		var prototype = otherklass.prototype || otherklass;
-		for ( var i in prototype ) {
-			Object.defineProperty( this.prototype, i, { value: prototype[i], writable: true } );
+	value: function () {
+		var arglen = arguments.length - 1;
+		var resolve;
+		if ( arglen > 0 && arguments[arglen] instanceof ResolveMixins ) {
+			resolve = arguments[arglen];
+		}
+		else {
+			++arglen;
+		}
+		for ( var i = 0; i < arglen; ++i ) {
+			var mixin = arguments[i];
+			var prototype = mixin.prototype || mixin;
+			for ( var key in prototype ) {
+				var value = undefined;
+				if ( this.prototype[key] !== undefined ) {
+					if ( resolve && resolve[key] !== undefined ) {
+						var rk = resolve[key];
+						value = rk.prototype ? rk.prototype[key] : rk[key];
+					}
+					if ( !value ) {
+						throw new Error( 'Unable to mixin property "'+key+'", it is already defined' );
+					}
+				}
+				else {
+					value = prototype[key];
+				}
+				Object.defineProperty( this.prototype, key, { value: value, writable: true } );
+			}
 		}
 		return this;
 	},
@@ -168,6 +200,40 @@ Unitest( 'Function.mixin()', function () {
 
 	test( a.asd == 'qwe' );
 	test( a instanceof A );
+
+	var c = {
+		a: 1
+	};
+
+	var d = {
+		b: 2
+	};
+
+	var e = {
+		a: 11
+	};
+
+	B.mixin( c, d );
+
+	test( new B().a == 1 );
+	test( new B().b == 2 );
+	var caught = false;
+	try {
+		B.mixin( e );
+	}
+	catch ( e ) {
+		caught = true;
+	}
+	test( caught );
+
+	B.mixin( e, ResolveMixins( {'a': c} ) );
+	test( new B().a == 1 );
+	
+	B.mixin( e, ResolveMixins( {'a': e} ) );
+	test( new B().a == 11 );
+	
+	B.mixin( { a: 12 }, ResolveMixins( {'a': B} ) );
+	test( new B().a == 11 );
 
 } );
 /*UNITESTS@*/

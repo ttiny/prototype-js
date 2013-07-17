@@ -37,3 +37,12 @@ Unitest( 'Array.duplicate()', function () {
 
 } );
 /*UNITESTS@*/
+
+/**
+Alias for {@see Array.concat()}, just for consistency.
+@def function Array.merge ( ... )
+*/
+Object.defineProperty( Array.prototype, 'merge', {
+	value: Array.prototype.concat,
+	writable: true
+} );
