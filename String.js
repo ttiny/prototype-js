@@ -195,14 +195,11 @@ if ( String.prototype.startsWith === undefined ) {
  */
 Object.defineProperty( String.prototype, 'count', { 
 	value: function ( search ) {
-		//if ( String.isString( search ) ) {
-			var ret = 0;
-			for ( var i = 0; (i = this.indexOf( search, i )) >= 0; i += search.length ) {
-				++ret;
-			}
-			return ret;
-		//}
-		return { left: this };
+		var ret = 0;
+		for ( var i = 0; (i = this.indexOf( search, i )) >= 0; i += search.length ) {
+			++ret;
+		}
+		return ret;
 	},
 	writable: true
 } );
