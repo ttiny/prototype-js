@@ -46,3 +46,38 @@ Object.defineProperty( Array.prototype, 'merge', {
 	value: Array.prototype.concat,
 	writable: true
 } );
+
+/**
+ * Retrieves or sets the last element of the array.
+ * @def property Array.last
+ * @return any|undefined Returns undefined if attempting to get the last element of zero-length array.
+ * @author Borislav Peev <borislav.asdf@gmail.com>
+ */
+Object.defineProperty( Array.prototype, 'last', {
+	get: function () {
+		var i = this.length - 1;
+		return i >= 0 ? this[i] : undefined;
+	},
+	set: function ( v ) {
+		var i = this.length - 1;
+		return i >= 0 ? this[i] = v : this[0] = v;
+	}
+} );
+
+/*@UNITESTS*/
+Unitest( 'Array.last()', function () {
+
+	var a = [ 1, 2 ];
+	test( a.last === 2 );
+	a.last = 3;
+	test( a.last === 3 && a[1] === 3 && a.length == 2 );
+
+	a = [];
+	test( a.last === undefined );
+	a.last = 2;
+	test( a.last === 2 && a.length == 1 )
+	
+
+
+} );
+/*UNITESTS@*/
