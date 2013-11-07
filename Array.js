@@ -49,8 +49,8 @@ Object.defineProperty( Array.prototype, 'merge', {
 
 /**
  * Retrieves or sets the last element of the array.
- * @def property Array.last
- * @return any|undefined Returns undefined if attempting to get the last element of zero-length array.
+ * @def var Array.last
+ * @var any|undefined Returns undefined if attempting to get the last element of zero-length array.
  * @author Borislav Peev <borislav.asdf@gmail.com>
  */
 Object.defineProperty( Array.prototype, 'last', {
