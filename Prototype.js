@@ -8,3 +8,5 @@ if ( typeof window != "undefined" && typeof require == "undefined" ) {
 /*@*/require( './Array.js' );
 /*@*/require( './String.js' );
 /*@*/require( './Function.js' );
+/*@*/require( './Number.js' );
+/*@*/require( './Boolean.js' );
