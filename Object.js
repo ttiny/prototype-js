@@ -70,7 +70,7 @@ Unitest( 'Object.duplicate()', function () {
 
 /**
  * Checks if argument is an Object and not a subclass of Object.
- * @def static function bool Object.isObject ( obj:mixed )
+ * @def static bool function Object.isObject ( obj:mixed )
  * @author Borislav Peev <borislav.asdf@gmail.com>
  */
 Object.defineProperty( Object, 'isObject', { 
@@ -94,7 +94,7 @@ Unitest( 'Object.isObject()', function () {
 
 /**
  * Filters out all properties for which the callback is not true.
- * @def static function bool Object.filter ( callback:Object.FilterCallback, thisArg:mixed|undefined )
+ * @def static bool function Object.filter ( callback:Object.FilterCallback, thisArg:mixed|undefined )
  * @return this
  * @author Borislav Peev <borislav.asdf@gmail.com>
  */
