@@ -19,7 +19,7 @@ Object.defineProperty( String, 'isString', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'String.isString()', function () {
+Unitest( 'String.isString()', function ( test ) {
 
 
 	test( !('asd' instanceof String) && String.isString( 'sad' ) );
@@ -59,7 +59,7 @@ Object.defineProperty( String.prototype, 'splitFirst', {
 
 
 /*@UNITESTS*/
-Unitest( 'String.splitFirst()', function () {
+Unitest( 'String.splitFirst()', function ( test ) {
 
 	var r = 'left center right'.splitFirst( ' ' );
 	test( r.left == 'left' );
@@ -118,7 +118,7 @@ Object.defineProperty( String.prototype, 'splitLast', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'String.splitLast()', function () {
+Unitest( 'String.splitLast()', function ( test ) {
 
 
 	var r = 'left center right'.splitLast( ' ' );
@@ -174,7 +174,7 @@ if ( String.prototype.startsWith === undefined ) {
 
 
 	/*@UNITESTS*/
-	Unitest( 'String.startsWith()', function () {
+	Unitest( 'String.startsWith()', function ( test ) {
 		
 		test( 'asd_qwe_zxc'.startsWith( 'asd' ) );
 		test( !'asd_qwe_zxc'.startsWith( '!asd' ) );
@@ -205,7 +205,7 @@ Object.defineProperty( String.prototype, 'count', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'String.count()', function () {
+Unitest( 'String.count()', function ( test ) {
 
 	test( 'asd'.count( 'sd' ) == 1 );
 	test( 'asd'.count( 's' ) == 1 );

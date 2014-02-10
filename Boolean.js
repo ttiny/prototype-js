@@ -15,7 +15,7 @@ Object.defineProperty( Boolean, 'isBoolean', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Boolean.isBoolean()', function () {
+Unitest( 'Boolean.isBoolean()', function ( test ) {
 
 
 	test( !(true instanceof Boolean) && Boolean.isBoolean( true ) );

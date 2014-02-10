@@ -21,7 +21,7 @@ Object.defineProperty( Function.prototype, 'define', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Function.define()', function () {
+Unitest( 'Function.define()', function ( test ) {
 
 	var A = function () {};
 	A.define( { test: function () { return this.qwe; }, qwe: 5 } );
@@ -49,7 +49,7 @@ Object.defineProperty( Function.prototype, 'defineStatic', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Function.defineStatic()', function () {
+Unitest( 'Function.defineStatic()', function ( test ) {
 
 	var A = function () {};
 	A.defineStatic( { test: function () { return this.qwe; }, qwe: 5 } );
@@ -79,7 +79,7 @@ Object.defineProperty( Function.prototype, 'extend', {
 
 
 /*@UNITESTS*/
-Unitest( 'Function.extend()', function () {
+Unitest( 'Function.extend()', function ( test ) {
 
 	// test simple prototype
 	function A () {
@@ -180,7 +180,7 @@ Object.defineProperty( Function.prototype, 'mixin', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Function.mixin()', function () {
+Unitest( 'Function.mixin()', function ( test ) {
 
 	function B () {
 
@@ -257,7 +257,7 @@ Object.defineProperty( Function.prototype, 'bind', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Function.bind()', function () {
+Unitest( 'Function.bind()', function ( test ) {
 
 	var obj = {}
 
@@ -300,7 +300,7 @@ Object.defineProperty( Function.prototype, 'bindArgsAfter', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Function.bindArgsAfter()', function () {
+Unitest( 'Function.bindArgsAfter()', function ( test ) {
 
 	var a = function () {
 		return arguments;
@@ -338,7 +338,7 @@ Object.defineProperty( Function.prototype, 'bindArgsBefore', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Function.bindArgsBefore()', function () {
+Unitest( 'Function.bindArgsBefore()', function ( test ) {
 
 	var a = function () {
 		return arguments;

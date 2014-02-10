@@ -15,7 +15,7 @@ Object.defineProperty( Number, 'isNumber', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Number.isNumber()', function () {
+Unitest( 'Number.isNumber()', function ( test ) {
 
 
 	test( !(5 instanceof Number) && Number.isNumber( 5 ) );

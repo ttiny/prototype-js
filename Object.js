@@ -20,7 +20,7 @@ Object.defineProperty( Object.prototype, 'merge', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Object.merge()', function () {
+Unitest( 'Object.merge()', function ( test ) {
 
 	var a = { a: 2, b: 3 }.merge( { a: 3, c: 4 } );
 	test( a.a === 3 );
@@ -57,7 +57,7 @@ Object.defineProperty( Object.prototype, 'duplicate', {
 
 
 /*@UNITESTS*/
-Unitest( 'Object.duplicate()', function () {
+Unitest( 'Object.duplicate()', function ( test ) {
 
 	var a = { a: {}, b: 3 };
 	test( a.duplicate() !== a );
@@ -81,7 +81,7 @@ Object.defineProperty( Object, 'isObject', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Object.isObject()', function () {
+Unitest( 'Object.isObject()', function ( test ) {
 
 	test( !Object.isObject( new String ) );
 	test( Object.isObject( {} ) );
@@ -117,8 +117,8 @@ Object.defineProperty( Object.prototype, 'filter', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Object.filter()', function () {
+Unitest( 'Object.filter()', function ( test ) {
 
-	testeqdeep( { a: 1, b: 2, c: 3 }.filter( function ( val, key ) { return key != 'b' } ) , { a: 1, c: 3 } );
+	test.eq( { a: 1, b: 2, c: 3 }.filter( function ( val, key ) { return key != 'b' } ) , { a: 1, c: 3 } );
 } );
 /*UNITESTS@*/

@@ -25,7 +25,7 @@ Object.defineProperty( Array.prototype, 'duplicate', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Array.duplicate()', function () {
+Unitest( 'Array.duplicate()', function ( test ) {
 
 	var a = [ {}, 1, "", [ 2 ] ];
 	test( a.duplicate() !== a );
@@ -65,7 +65,7 @@ Object.defineProperty( Array.prototype, 'last', {
 } );
 
 /*@UNITESTS*/
-Unitest( 'Array.last()', function () {
+Unitest( 'Array.last()', function ( test ) {
 
 	var a = [ 1, 2 ];
 	test( a.last === 2 );
