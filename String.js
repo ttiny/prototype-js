@@ -154,7 +154,7 @@ Unitest( 'String.splitLast()', function ( test ) {
 
 
 /**
-@def bool function String.startsWith( searchString:string, position:int = "0" )
+@def bool function String.startsWith ( searchString:string, position:int = "0" )
 @param String to search for.
 @param Position in the string where to start the search.
 */
@@ -181,6 +181,42 @@ if ( String.prototype.startsWith === undefined ) {
 		test( !'asd_qwe_zxc'.startsWith( 'qwe' ) );
 		test( 'asd_qwe_zxc'.startsWith( 'qwe', 4 ) );
 		test( !'asd_qwe_zxc'.startsWith( 'qwe', 5 ) );
+	
+	} );
+	/*UNITESTS@*/
+
+}
+
+
+/**
+@def bool function String.endsWith ( searchString:string, position:int = "this.length" )
+@param String to search for.
+@param Treat the string as if it was this long.
+*/
+if ( String.prototype.endsWith === undefined ) {
+	Object.defineProperty( String.prototype, 'endsWith', {
+		enumerable: false,
+		configurable: false,
+		writable: false,
+		value: function ( searchString, position ) {
+			var len = searchString.length;
+			position = position || this.length;
+			if ( len > position ) {
+				return false;
+			}
+			return this.slice( position - len, position ) === searchString;
+		}
+	} );
+
+
+	/*@UNITESTS*/
+	Unitest( 'String.endsWith()', function ( test ) {
+		
+		test( 'asd_qwe_zxc'.endsWith( 'zxc' ) );
+		test( !'asd_qwe_zxc'.endsWith( '!zxc' ) );
+		test( !'asd_qwe_zxc'.endsWith( 'qwe' ) );
+		test( 'asd_qwe_zxc'.endsWith( 'qwe', 7 ) );
+		test( !'asd_qwe_zxc'.endsWith( 'qwe', 6 ) );
 	
 	} );
 	/*UNITESTS@*/
