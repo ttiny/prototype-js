@@ -2,10 +2,7 @@
   "name": "Prototype",
   "description": "Extensions to JS stdlib",
   "version": "1.0.3",
-  "author": {
-    "name": "Borislav Peev",
-    "email": "borislav.asdf@gmail.com"
-  },
+  "author": "Borislav Peev <borislav.asdf@gmail.com>",
   "engine": [
     "node >= 0.10"
   ],
@@ -19,17 +16,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/perennials/prototype-js.git"
-  },
-  "readme": "Prototype\n=========\nExtensions to the JavaScript standard library for Node.js and browser.\n\n```\nnpm install https://github.com/Perennials/prototype-js/tarball/master\n```\n\nTODO\n----\n\n* `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`\n* `Object.mergeDeep()`, `Array.mergeDeep()`\n* `RegExp.matchRecursive()`\n* `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset lastIndex for even new strings.\nThis will save the lastIndex and reset it so the regexp can be reused safely without losing current position.\n* `RegExp.resetIndex()`\n* `String.indexOf()` to work with RegExps\n",
-  "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/perennials/prototype-js/issues"
-  },
-  "homepage": "https://github.com/perennials/prototype-js",
-  "_id": "Prototype@1.0.2",
-  "dist": {
-    "shasum": "6ffc3e304e9f432fac4098d791a0398a3796d92d"
-  },
-  "_from": "https://github.com/Perennials/prototype-js/tarball/master",
-  "_resolved": "https://github.com/Perennials/prototype-js/tarball/master"
+  }
 }
