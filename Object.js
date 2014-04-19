@@ -93,6 +93,33 @@ Unitest( 'Object.isObject()', function ( test ) {
 
 
 /**
+ * Retrieves the values of all own properties.
+ * @def static bool function Object.values ( obj:mixed )
+ * @author Borislav Peev <borislav.asdf@gmail.com>
+ */
+Object.defineProperty( Object, 'values', { 
+	value: function ( obj ) {
+		var keys = Object.keys( obj );
+		var values = new Array( keys.length );
+		for ( var i = 0, iend = keys.length; i < iend; ++i ) {
+			values[i] = obj[ keys[i] ];
+		}
+		return values;
+	},
+	writable: true
+} );
+
+/*@UNITESTS*/
+Unitest( 'Object.values()', function ( test ) {
+
+	test.eq( Object.values( { a: 1, b: 2 } ), [ 1, 2 ] );
+
+} );
+/*UNITESTS@*/
+
+
+
+/**
  * Filters out all properties for which the callback is not true.
  * @def static bool function Object.filter ( callback:Object.FilterCallback, thisArg:mixed|undefined )
  * @return this
