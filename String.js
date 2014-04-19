@@ -29,6 +29,160 @@ Unitest( 'String.isString()', function ( test ) {
 /*UNITESTS@*/
 
 
+/**
+ * Extends the built-in {String.indexOfEx} with support of {RegExp}.
+ *
+ * @def function String.indexOfEx ( search:string|RegExp, offset:int = 0, out:Object = undefined )
+ *
+ * @param string|RegExp Subject to search for.
+ * @param int Offset to start the search at.
+ * @param Object Optional object to receive the matched subject's length in its `length` property.
+ * @return int -1 if the search value is not found.
+ * @author Borislav Peev <borislav.asdf@gmail.com>
+ */
+
+Object.defineProperty( String.prototype, 'indexOfEx', { 
+	value: function ( search, offset, out ) {
+		if ( search instanceof RegExp ) {
+
+			if ( offset > 0 ) {
+				var tLastIndex = search.lastIndex;
+				var ret = search.exec( this.substr( offset ) );
+				search.lastIndex = tLastIndex;
+				
+				if ( ret !== null ) {
+					if ( out ) {
+						out.length = ret[0].length;
+					}
+					return ret.index + offset;
+				}
+				return -1;
+			}
+			else {
+				var tLastIndex = search.lastIndex;
+				search.lastIndex = 0;
+				var ret = search.exec( this );
+				search.lastIndex = tLastIndex;
+
+				if ( ret !== null ) {
+					if ( out ) {
+						out.length = ret[0].length;
+					}
+					return ret.index;
+				}
+				return -1;
+			}
+		}
+		else {
+			var ret = this.indexOf( search, offset );
+			if ( out && ret >= 0 ) {
+				out.length = search.length;
+			}
+			return ret;
+		}
+	},
+	writable: true
+} );
+
+
+/*@UNITESTS*/
+Unitest( 'String.indexOfEx()', function ( test ) {
+
+	var r = 'left center right';
+	var out = {};
+	
+	test( r.indexOfEx( 'center' ) == 5 );
+	test( r.indexOfEx( 'center', undefined, out ) == 5 && out.length == 6 );
+	test( r.indexOfEx( 'center', 6 ) == -1 );
+
+	test( r.indexOfEx( /c[a-z]+r/ ) == 5 );
+	test( r.indexOfEx( /c[a-z]+r/, undefined, out ) == 5 && out.length == 6 );
+	test( r.indexOfEx( /c[a-z]+r/, 6 ) == -1 );
+	
+
+} );
+/*UNITESTS@*/
+
+/**
+ * Extends the built-in {String.lastIndexOfEx} with support of {RegExp}.
+ *
+ * @def function String.lastIndexOfEx ( search:string|RegExp, offset:int = this.length, out:Object = undefined )
+ *
+ * @param string|RegExp Subject to search for.
+ * @param int Offset to start the search at.
+ * @param Object Optional object to receive the matched subject's length in its `length` property.
+ * @return int -1 if the search value is not found.
+ * @author Borislav Peev <borislav.asdf@gmail.com>
+ */
+
+Object.defineProperty( String.prototype, 'lastIndexOfEx', { 
+	value: function ( search, offset, out ) {
+		if ( search instanceof RegExp ) {
+			offset = offset || this.length;
+			var last, m;
+			if ( !search.global ) {
+				if ( search._lastIndexOf ) {
+					search = search._lastIndexOf;
+				}
+				else {
+					//if no global flag we will end in infinite loop
+					var flags = (search.ignoreCase ? 'i' : '') +
+					            (search.multiline ? 'm' : '') +
+					            'g';
+					
+					// cache our regexp
+					search = ( search._lastIndexOf = new RegExp( search.source, flags ) );
+				}
+				//throw new Error( 'String.lastIndexOf for RegExp without g flag will loop forever.' );
+			}
+			
+			// js lastIndex is shit
+			var tLastIndex = search.lastIndex;
+			search.lastIndex = 0;
+			while ( (m = search.exec( this )) && m.index <= offset ) {
+				last = m;
+			}
+			search.lastIndex = tLastIndex;
+
+			if ( last ) {
+				if ( out ) {
+					out.length = last[0].length;
+				}
+				return last.index;
+			}
+			return -1;
+		}
+		else {
+			var ret = this.lastIndexOf( search, offset );
+			if ( out && ret >= 0 ) {
+				out.length = search.length;
+			}
+			return ret;
+		}
+	},
+	writable: true
+} );
+
+
+/*@UNITESTS*/
+Unitest( 'String.lastIndexOfEx()', function ( test ) {
+
+	var r = 'left center right';
+	var out = {};
+	
+	test( r.lastIndexOfEx( 'center' ) == 5 );
+	test( r.lastIndexOfEx( 'center', undefined, out ) == 5 && out.length == 6 );
+	test( r.lastIndexOfEx( 'center', 5 ) == 5 );
+	test( r.lastIndexOfEx( 'center', 4 ) == -1 );
+
+	test( r.lastIndexOfEx( /c[a-z]+r/ ) == 5 );
+	test( r.lastIndexOfEx( /c[a-z]+r/, undefined, out ) == 5 && out.length == 6 );
+	test( r.lastIndexOfEx( /c[a-z]+r/, 5 ) == 5 );
+	test( r.lastIndexOfEx( /c[a-z]+r/, 4 ) == -1 );
+	
+
+} );
+/*UNITESTS@*/
 
 /**
  * Splits a string on the first occurence of substring.
@@ -40,19 +194,13 @@ Unitest( 'String.isString()', function ( test ) {
  */
 Object.defineProperty( String.prototype, 'splitFirst', { 
 	value: function ( search ) {
-		if ( String.isString( search ) ) {
-			var i = this.indexOf( search );
-			if ( i >= 0 ) {
-				return { left: this.substr( 0, i ), right: this.substr( i + search.length ) };
-			}
+		var ret = { left: this, right: undefined, length: 0 };
+		var i = this.indexOfEx( search, undefined, ret );
+		if ( i >= 0 ) {
+			ret.left = this.substr( 0, i );
+			ret.right = this.substr( i + ret.length );
 		}
-		else {
-			var last = search.exec( this );
-			if ( last !== null ) {
-				return { left: this.substr( 0, last.index ), right: this.substr( last.index + last[0].length ) };
-			}
-		}
-		return { left: this };
+		return ret;
 	},
 	writable: true
 } );
@@ -83,7 +231,6 @@ Unitest( 'String.splitFirst()', function ( test ) {
 } );
 /*UNITESTS@*/
 
-
 /**
  * Splits a string on the last occurence of substring.
  * @def function String.splitLast ( search:string|RegExp )
@@ -92,27 +239,15 @@ Unitest( 'String.splitFirst()', function ( test ) {
  */
 Object.defineProperty( String.prototype, 'splitLast', { 
 	value: function ( search ) {
-		if ( String.isString( search ) ) {
-			var i = this.lastIndexOf( search );
-			if ( i >= 0 ) {
-				return { left: this.substr( 0, i ), right: this.substr( i + search.length ) };
-			}
+
+		var ret = { left: this, right: undefined, length: 0 };
+		var i = this.lastIndexOfEx( search, undefined, ret );
+		if ( i >= 0 ) {
+			ret.left = this.substr( 0, i );
+			ret.right = this.substr( i + ret.length );
 		}
-		else {
-			var last, m;
-			if ( !search.global ) {
-				//if no global flag we will end in infinite loop
-				search = new RegExp( search.source, (search.ignoreCase ?  'i' : '') + (search.multiline ?  'm' : '') + 'g' );
-				//throw new Error( 'String.splitLast for RegExp without g flag will loop forever.' );
-			}
-			while ( m = search.exec( this ) ) {
-				last = m;
-			}
-			if ( last !== null ) {
-				return { left: this.substr( 0, last.index ), right: this.substr( last.index + last[0].length ) };
-			}
-		}
-		return { left: this };
+		return ret;
+
 	},
 	writable: true
 } );

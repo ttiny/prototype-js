@@ -15,4 +15,4 @@ TODO
 * `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset lastIndex for even new strings.
 This will save the lastIndex and reset it so the regexp can be reused safely without losing current position.
 * `RegExp.resetIndex()`
-* `String.indexOf()` to work with RegExps
+
