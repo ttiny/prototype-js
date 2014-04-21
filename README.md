@@ -11,6 +11,8 @@ TODO
 
 * `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`
 * `Object.mergeDeep()`, `Array.mergeDeep()`
+* `Object.cmp()`, `Array.cmp()` (copy from unitest-js)
+* `Array.diff()`
 * `RegExp.matchRecursive()`
 * `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset lastIndex for even new strings.
 This will save the lastIndex and reset it so the regexp can be reused safely without losing current position.
