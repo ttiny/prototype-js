@@ -91,6 +91,38 @@ Unitest( 'Object.isObject()', function ( test ) {
 } );
 /*UNITESTS@*/
 
+/**
+ * Applies arguments to a constructor.
+ * Credits http://stackoverflow.com/a/16527324/325443.
+ * @def static mixed function Object.newArgs ( obj:Object, args:array )
+ * @author Borislav Peev <borislav.asdf@gmail.com>
+ */
+Object.defineProperty( Object, 'newArgs', { 
+	value: function ( ctor, args ) {
+		var new_obj = Object.create( ctor.prototype );
+		var ctor_ret = ctor.apply( new_obj, args );
+
+		// Some constructors return a value; make sure to use it!
+		return ctor_ret !== undefined ? ctor_ret: new_obj;
+	},
+	writable: true
+} );
+
+/*@UNITESTS*/
+Unitest( 'Object.newArgs()', function ( test ) {
+
+	var A = function () {
+	};
+
+	var B = function () {
+		return arguments[1];
+	};
+
+	test( Object.newArgs( A, [ 1, 2 ] ) instanceof A );
+	test( Object.newArgs( B, [ 1, 2 ] ) === 2 );
+
+} );
+/*UNITESTS@*/
 
 /**
  * Retrieves the values of all own properties.
