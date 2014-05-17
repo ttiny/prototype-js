@@ -11,8 +11,10 @@
  */
 Object.defineProperty( Object.prototype, 'merge', {
 	value: function ( object ) {
-		for ( var i in object ) {
-			this[i] = object[i];
+		var keys = Object.getOwnPropertyNames( object );
+		for ( var i = 0, iend = keys.length; i < iend; ++i ) {
+			var key = keys[ i ];
+			this[ key ] = object[ key ];
 		}
 		return this;
 	},
@@ -41,13 +43,15 @@ Unitest( 'Object.merge()', function ( test ) {
 Object.defineProperty( Object.prototype, 'duplicate', {
 	value: function () {
 		var ret = Object.create( Object.getPrototypeOf( this ) );
-		for ( var i in this ) {
-			var item = this[i];
+		var keys = Object.getOwnPropertyNames( this );
+		for ( var i = 0, iend = keys.length; i < iend; ++i ) {
+			var key = keys[ i ];
+			var item = this[ key ];
 			if ( item instanceof Object && item.duplicate instanceof Function ) {
-				ret[i] = item.duplicate();
+				ret[ key ] = item.duplicate();
 			}
 			else {
-				ret[i] = item;
+				ret[ key ] = item;
 			}
 		}
 		return ret;
