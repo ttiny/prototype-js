@@ -124,9 +124,11 @@ Unitest( 'Function.extend()', function ( test ) {
 
 /**
 Passed as last argument to {@see Function.mixin()} to resolve conflicts.
+
 ```javascript
 A.mixin( B, C, ResolveMixins( { 'overlappingMember':  B } ) );
 ```
+
 @def function ResolveMixins ( resolve:Object )
 */
 function ResolveMixins ( resolve ) {
@@ -137,13 +139,12 @@ function ResolveMixins ( resolve ) {
 }
 
 /**
- * Mixes the prototype of another function into the prototype of this function.
- * Notice that other function's prototype must have some enumerable properties,
- * which means they can not be defined using {@see Function.define() .define()}
- * @def static function Function.mixin( mixinPrototype, ... )
- * @param Object
- * @return this
- */
+Mixes the prototype of another function into the prototype of this function.
+
+@def static function Function.mixin( mixinPrototype, ... )
+@param Object
+@return this
+*/
 Object.defineProperty( Function.prototype, 'mixin', { 
 	value: function () {
 		var arglen = arguments.length - 1;
@@ -157,12 +158,15 @@ Object.defineProperty( Function.prototype, 'mixin', {
 		for ( var i = 0; i < arglen; ++i ) {
 			var mixin = arguments[i];
 			var prototype = mixin.prototype || mixin;
-			for ( var key in prototype ) {
+			var keys = Object.getOwnPropertyNames( prototype );
+			// for ( var key in prototype ) {
+			for ( var j = keys.length - 1; j >= 0; --j ) {
+				var key = keys[ j ];
 				var value = undefined;
 				if ( this.prototype[key] !== undefined ) {
 					if ( resolve && resolve[key] !== undefined ) {
-						var rk = resolve[key];
-						value = rk.prototype ? rk.prototype[key] : rk[key];
+						var preffered = resolve[key];
+						value = preffered.prototype ? preffered.prototype[key] : preffered[key];
 					}
 					if ( !value ) {
 						throw new Error( 'Unable to mixin property "'+key+'", it is already defined' );
@@ -353,3 +357,10 @@ Unitest( 'Function.bindArgsBefore()', function ( test ) {
 
 } );
 /*UNITESTS@*/
+
+if ( typeof global !== 'undefined' ) {
+	global.ResolveMixins = ResolveMixins;
+}
+else if ( typeof window !== 'undefined' ) {
+	window.ResolveMixins = ResolveMixins;
+}
