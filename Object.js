@@ -1,6 +1,6 @@
 "use strict";
 
-/*@UNITESTS*//*@*/require( 'Unitest' );/*UNITESTS@*/
+
 
 /**
  * Copies references of properties from another object to this one.
@@ -21,16 +21,7 @@ Object.defineProperty( Object.prototype, 'merge', {
 	writable: true
 } );
 
-/*@UNITESTS*/
-Unitest( 'Object.merge()', function ( test ) {
 
-	var a = { a: 2, b: 3 }.merge( { a: 3, c: 4 } );
-	test( a.a === 3 );
-	test( a.b === 3 );
-	test( a.c === 4 );
-
-} );
-/*UNITESTS@*/
 
 /**
  * Creates object with duplicates of the properties of this object.
@@ -60,16 +51,7 @@ Object.defineProperty( Object.prototype, 'duplicate', {
 } );
 
 
-/*@UNITESTS*/
-Unitest( 'Object.duplicate()', function ( test ) {
 
-	var a = { a: {}, b: 3 };
-	test( a.duplicate() !== a );
-	test( a.duplicate().a !== a.a );
-	test( a.duplicate().b == a.b );
-
-} );
-/*UNITESTS@*/
 
 
 /**
@@ -84,16 +66,7 @@ Object.defineProperty( Object, 'isObject', {
 	writable: true
 } );
 
-/*@UNITESTS*/
-Unitest( 'Object.isObject()', function ( test ) {
 
-	test( !Object.isObject( new String ) );
-	test( Object.isObject( {} ) );
-	test( !Object.isObject( 1 ) );
-	test( !Object.isObject( 'asd' ) );
-
-} );
-/*UNITESTS@*/
 
 /**
  * Applies arguments to a constructor.
@@ -112,21 +85,7 @@ Object.defineProperty( Object, 'newArgs', {
 	writable: true
 } );
 
-/*@UNITESTS*/
-Unitest( 'Object.newArgs()', function ( test ) {
 
-	var A = function () {
-	};
-
-	var B = function () {
-		return arguments[1];
-	};
-
-	test( Object.newArgs( A, [ 1, 2 ] ) instanceof A );
-	test( Object.newArgs( B, [ 1, 2 ] ) === 2 );
-
-} );
-/*UNITESTS@*/
 
 /**
  * Retrieves the values of all own properties.
@@ -145,13 +104,7 @@ Object.defineProperty( Object, 'values', {
 	writable: true
 } );
 
-/*@UNITESTS*/
-Unitest( 'Object.values()', function ( test ) {
 
-	test.eq( Object.values( { a: 1, b: 2 } ), [ 1, 2 ] );
-
-} );
-/*UNITESTS@*/
 
 
 
@@ -179,9 +132,3 @@ Object.defineProperty( Object.prototype, 'filter', {
 	writable: true
 } );
 
-/*@UNITESTS*/
-Unitest( 'Object.filter()', function ( test ) {
-
-	test.eq( { a: 1, b: 2, c: 3 }.filter( function ( val, key ) { return key != 'b' } ) , { a: 1, c: 3 } );
-} );
-/*UNITESTS@*/

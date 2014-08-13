@@ -1,16 +1,16 @@
 {
   "name": "Prototype",
-  "description": "Extensions to JS stdlib",
-  "version": "1.0.8",
+  "description": "Extensions to the JS stdlib",
+  "version": "1.1.0",
   "author": "Borislav Peev <borislav.asdf@gmail.com>",
   "engine": [
     "node >= 0.10"
   ],
   "main": "Prototype.js",
   "scripts": {
-    "test": "node tests.js"
+    "test": "node ./tests/tests.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "Unitest": "https://github.com/perennials/unitest-js/tarball/master"
   },
   "repository": {

@@ -14,7 +14,8 @@ TODO
 * `Object.cmp()`, `Array.cmp()` (copy from unitest-js)
 * `Array.diff()`
 * `RegExp.matchRecursive()`
-* `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset lastIndex for even new strings.
-This will save the lastIndex and reset it so the regexp can be reused safely without losing current position.
+* `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset
+  lastIndex for even new strings. This will save the lastIndex and reset it so
+  the regexp can be reused safely without losing current position.
 * `RegExp.resetIndex()`
 

@@ -1,1 +1,2 @@
-node tests.js nocolor
+#!/bin/bash
+node ./tests/tests.js nocolor
