@@ -61,7 +61,7 @@ Unitest( 'Function.extend()', function ( test ) {
 
 } );
 
-Unitest( 'Function.mixin()', function ( test ) {
+Unitest( 'Function.mixin()/Object.instanceof', function ( test ) {
 
 	function B () {
 
@@ -116,7 +116,177 @@ Unitest( 'Function.mixin()', function ( test ) {
 	B.mixin( { a: 12 }, ResolveMixins( {'a': B} ) );
 	test( new B().a == 11 );
 
+	var IFace1 = function () {};
+	IFace1.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {},
+	} );
+	
+	var IFace2 = function () {};
+	IFace2.extend( IFace1, {
+		iface3_decl: function () {}
+	} );
+
+	var TTrait1 = function () {}
+	TTrait1.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {}
+	} );
+	var TTrait2 = function () {};
+	TTrait2.define( {
+		iface3_decl: function () {},
+	} );
+
+	var A = function () {};
+	A.mixin( TTrait1 );
+
+	var caught = false;
+	try { A.implement( TTrait1 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	var caught = false;
+	try { A.implement( IFace1 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	test( !( (new A) instanceof IFace1 ) );
+	test( (new A).instanceof( TTrait1 ) );
+	test( (new A).instanceof( IFace1 ) );
+
+	A.mixin( TTrait2 );
+
+	var caught = false;
+	try { A.implement( TTrait2 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	var caught = false;
+	try { A.implement( IFace2 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	// var IFace = function () {};
+	// IFace.define( { func: function () {} } );
+	// var TTrait = function () {};
+	// TTrait.define( { func: function () { return 1; } } ).implement( IFace );
+
+	// var A = function () {};
+	// A.mixin( TTrait );
+	// test( (new A).instanceof( IFace ) );
 } );
+
+Unitest( 'Function.implement/Object.instanceof', function ( test ) {
+
+	var IFace1 = function () {'iface1';};
+	IFace1.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {},
+	} );
+	
+	var IFace2 = function () {'iface2';};
+	IFace2.extend( IFace1, {
+		iface3_decl: function () {}
+	} );
+
+	var A = function () {};
+	var caught = false;
+	try { A.implement( IFace1 ); }
+	catch ( e ) { caught = true; }
+	test( caught );
+
+	var A = function () {};
+	A.define( {
+		iface1_decl: function () {},
+		iface2_decl: 'notfn',
+	} );
+
+	var caught = false;
+	try { A.implement( IFace1 ); }
+	catch ( e ) { caught = true; }
+	test( caught );
+
+	var A = function () {};
+	A.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {},
+	} );
+
+	var caught = false;
+	try { A.implement( IFace1 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	var A = function () {};
+	A.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {},
+	} );
+
+	var caught = false;
+	try { A.implement( IFace2 ); }
+	catch ( e ) { caught = true; }
+	test( caught );
+
+	var A = function () {};
+	A.define( {
+		iface1_decl: function () {},
+		iface3_decl: function () {},
+	} );
+
+	var caught = false;
+	try { A.implement( IFace2 ); }
+	catch ( e ) { caught = true; }
+	test( caught );
+
+	var A = function () {};
+	A.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {},
+		iface3_decl: function () {},
+	} );
+
+	var caught = false;
+	try { A.implement( IFace2 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	test( (new A).instanceof( IFace2 ) );
+	test( (new A).instanceof( IFace1 ) );
+
+	var A = function () {};
+	A.define( {
+		iface1_decl: function () {},
+		iface2_decl: function () {},
+	} );
+	var B = function () {};
+	B.extend( A, {
+		iface3_decl: function () {},
+	} );
+
+	var caught = false;
+	try { A.implement( IFace1 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	var caught = false;
+	try { B.implement( IFace2 ); }
+	catch ( e ) { caught = true; }
+	test( !caught );
+
+	test( (new B) instanceof A );
+	test( (new B).instanceof( A ) );
+	test( (new A).instanceof( IFace1 ) );
+	test( !( (new A) instanceof IFace1 ) );
+	test( !(new A).instanceof( IFace2 ) );
+	test( !( (new A) instanceof IFace2 ) );
+	test( (new B).instanceof( IFace1 ) );
+	test( (new B).instanceof( IFace2 ) );
+	test( !( (new B) instanceof IFace1 ) );
+	test( !( (new B) instanceof IFace2 ) );
+
+} );
+
 
 Unitest( 'Function.bind()', function ( test ) {
 

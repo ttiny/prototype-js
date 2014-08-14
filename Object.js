@@ -1,6 +1,52 @@
 "use strict";
 
+(function () {
+	
+	var _checkImplementation = function ( proto, clas ) {
+		var __implements = proto.__implements;
+		if ( !(__implements instanceof Array) ) {
+			return false;
+		}
+		
+		for ( var i = __implements.length - 1; i >= 0; --i ) {
+			if ( clas === __implements[ i ] ) {
+				return true;
+			}
+		}
+		return false;
+	};
 
+	Object.defineProperty( Object.prototype, 'instanceof', { value: function ( clas ) {
+			// this crashes if not used with functions, can be fixed but not worth the performance cost
+			if ( this instanceof clas ) {
+				return true;
+			}
+
+			var proto = Object.getPrototypeOf( this );
+			
+			do {
+				if ( _checkImplementation( proto, clas ) ) {
+					return true;
+				}
+				// skip built ins
+				if ( proto === Object ||
+				     proto === Array ||
+				     proto === Function ||
+				     proto === String ||
+				     proto === Number ||
+				     proto === Boolean ) {
+
+					break;
+				}
+				proto = Object.getPrototypeOf( proto );
+			} while ( proto );
+
+			return false;
+		},
+		writable: false
+	} );
+
+})();
 
 /**
  * Copies references of properties from another object to this one.

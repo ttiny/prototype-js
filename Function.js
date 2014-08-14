@@ -1,7 +1,6 @@
 "use strict";
 
 
-
 /**
  * Defines properties in the prototype of the function.
  * Each property will be added using Object.definePrototype.
@@ -77,51 +76,127 @@ function ResolveMixins ( resolve ) {
 	this.merge( resolve );
 }
 
-/**
-Mixes the prototype of another function into the prototype of this function.
+(function () {
+	
+	var _checkImplementation = function ( clas, iface ) {
+		var names = Object.getOwnPropertyNames( iface );
+		for ( var j = 0, jend = names.length; j < jend; ++j ) {
+			var name = names[ j ];
+			if ( iface[ name ] instanceof Function &&
+			    !(clas[ name ] instanceof Function) ) {
 
-@def static function Function.mixin( mixinPrototype, ... )
-@param Object
-@return this
-*/
-Object.defineProperty( Function.prototype, 'mixin', { 
-	value: function () {
-		var arglen = arguments.length - 1;
-		var resolve;
-		if ( arglen > 0 && arguments[arglen] instanceof ResolveMixins ) {
-			resolve = arguments[arglen];
-		}
-		else {
-			++arglen;
-		}
-		for ( var i = 0; i < arglen; ++i ) {
-			var mixin = arguments[i];
-			var prototype = mixin.prototype || mixin;
-			var keys = Object.getOwnPropertyNames( prototype );
-			// for ( var key in prototype ) {
-			for ( var j = keys.length - 1; j >= 0; --j ) {
-				var key = keys[ j ];
-				var value = undefined;
-				if ( this.prototype[key] !== undefined ) {
-					if ( resolve && resolve[key] !== undefined ) {
-						var preffered = resolve[key];
-						value = preffered.prototype ? preffered.prototype[key] : preffered[key];
-					}
-					if ( !value ) {
-						throw new Error( 'Unable to mixin property "'+key+'", it is already defined' );
-					}
-				}
-				else {
-					value = prototype[key];
-				}
-				Object.defineProperty( this.prototype, key, { value: value, writable: true } );
+				throw new Error( 'Method "' + name + '" is not implemented' );
 			}
 		}
-		return this;
-	},
-	writable: true
-} );
+	};
 
+	var _markImplemented = function ( obj, proto ) {
+		if ( !obj.prototype.hasOwnProperty( '__implements' ) ) {
+			Object.defineProperty( obj.prototype, '__implements', { value: [], writable: false } );
+		}
+		
+		var __implements = obj.prototype.__implements;
+		do {
+			__implements.push( proto );
+			if ( proto.prototype === undefined ) {
+				break;
+			}
+			proto = Object.getPrototypeOf( proto.prototype ).constructor;
+			if ( proto === Object ||
+			     proto === Array ||
+			     proto === Function ||
+			     proto === String ||
+			     proto === Number ||
+			     proto === Boolean ) {
+				
+				break;
+			}
+		} while ( proto );
+	};
+
+	Object.defineProperty( Function.prototype, 'implement', { value: function () {
+			for ( var i = 0, iend = arguments.length; i < iend; ++i ) {
+				var proto = arguments[ i ];
+				
+				_markImplemented( this, proto );
+
+				do {
+					_checkImplementation( this.prototype, proto.prototype || proto );
+					// skip built ins
+					if ( proto.prototype === undefined ) {
+						break;
+					}
+					proto = Object.getPrototypeOf( proto.prototype );
+					if ( proto === Object ||
+					     proto === Array ||
+					     proto === Function ||
+					     proto === String ||
+					     proto === Number ||
+					     proto === Boolean ) {
+						
+						break;
+					}
+				} while ( proto );
+			}
+		},
+		writable: false
+	} );
+
+	/**
+	Mixes the prototype of another function into the prototype of this function.
+
+	@def static function Function.mixin( mixinPrototype, ... )
+	@param Object
+	@return this
+	*/
+	Object.defineProperty( Function.prototype, 'mixin', { 
+		value: function () {
+			var arglen = arguments.length - 1;
+			var resolve;
+			if ( arglen > 0 && arguments[arglen] instanceof ResolveMixins ) {
+				resolve = arguments[arglen];
+			}
+			else {
+				++arglen;
+			}
+			for ( var i = 0; i < arglen; ++i ) {
+				var mixin = arguments[ i ];
+
+				_markImplemented( this, mixin );
+
+				var prototype = mixin.prototype || mixin;
+				var isProto = ( prototype !== mixin );
+				var keys = Object.getOwnPropertyNames( prototype );
+				// for ( var key in prototype ) {
+				for ( var j = keys.length - 1; j >= 0; --j ) {
+					var key = keys[ j ];
+					if ( isProto && key === 'constructor' ) {
+						continue;
+					}
+					if ( key === '__implements' ) {
+						continue;
+					}
+					var value = undefined;
+					if ( this.prototype[key] !== undefined ) {
+						if ( resolve && resolve[key] !== undefined ) {
+							var preffered = resolve[key];
+							value = preffered.prototype ? preffered.prototype[key] : preffered[key];
+						}
+						if ( !value ) {
+							throw new Error( 'Unable to mixin property "' + key + '", it is already defined' );
+						}
+					}
+					else {
+						value = prototype[key];
+					}
+					Object.defineProperty( this.prototype, key, { value: value, writable: true } );
+				}
+			}
+			return this;
+		},
+		writable: true
+	} );
+})();
 
 
 /**

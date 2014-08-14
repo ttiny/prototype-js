@@ -27,3 +27,26 @@ Unitest( 'Array.last()', function ( test ) {
 	
 
 } );
+
+
+Unitest( 'Array.map()', function ( test ) {
+
+	var b = [ 1, 2 ];
+	var a = b.map( function ( i ) { return i; } );
+	test( a !== b );
+	test( b[ 0 ] === a[ 0 ] )
+	test( b[ 1 ] === a[ 1 ] )
+	test( b.length === a.length );
+
+	var A = function ( i ) { this.i = i; }
+	A.prototype.test = function ( a, b, c ) { return a.i * 2 };
+
+	var b = [ new A( 1 ), new A( 2 ) ];
+	var a = b.map( 'test' );
+	test( a !== b );
+	test( a[ 0 ] === b[ 0 ].i * 2 )
+	test( a[ 1 ] === b[ 1 ].i * 2 )
+	test( b.length === a.length );
+	
+
+} );
