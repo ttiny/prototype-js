@@ -73,14 +73,14 @@ A callback passed to {Array.map()}.
 @param int
 @param Array
 */
-Object.defineProperty( Array.prototype, '_map', {
+Object.defineProperty( Array.prototype, '__map', {
 	value: Array.prototype.map,
 	writable: false
 } );
 
 Object.defineProperty( Array.prototype, 'map', { value: function ( callback, thisArg ) {
 		if ( callback instanceof Function ) {
-			return this._map( callback, thisArg );
+			return this.__map( callback, thisArg );
 		}
 
 		var iend = this.length;
