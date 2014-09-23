@@ -51,6 +51,7 @@ Animal.extend( Earthling, {
 
 	getType: function () {
 		return 'Animal';
+		// || we could call the parent method Earthling.prototype.getType.call( this );
 	}
 
 } );
@@ -138,6 +139,7 @@ Changelog
 TODO
 ----
 
+* `String.toCamelCase()` - to make the first letter upper case.
 * `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`
 * `Object.mergeDeep()`, `Array.mergeDeep()`
 * `Object.cmp()`, `Array.cmp()` (copy from unitest-js)
