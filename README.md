@@ -85,7 +85,7 @@ TLeggedEarthling.define( {
 	}
 } );
 
-Animal.mixin( TLeggedEarthling ).implement( ILeggedEarthling );;
+Animal.mixin( TLeggedEarthling ).implement( ILeggedEarthling );
 
 // we can mixin multiple mixins
 // and we can resolve overlapping functions in mixins.
