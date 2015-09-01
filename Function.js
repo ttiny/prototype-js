@@ -200,26 +200,6 @@ function ResolveMixins ( resolve ) {
 
 
 /**
- * Creates a wrapper functon that always calls another function with the same this context.
- * There is native Function.bind() in ES5, but surprisingly it works slower than a JS implementation.
- * @def function Function.bind ( newthis )
- * @param object
- * @return function
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
-Object.defineProperty( Function.prototype, 'bind', { 
-	value: function( that ) {
-		var fn = this;
-		return function ( ) {
-			return fn.apply( that, arguments );
-		};
-	},
-	writable: true
-} );
-
-
-
-/**
  * Creates a wrapper function that always calls another function with the same arguments.
  * Bound arguments will be appended to any arguments that the function is called with.
  * @def function Function.bindArgsAfter ( ... )

@@ -128,14 +128,6 @@ if ( animal.instanceof( Earthling ) ) {
 }
 ```
 
-Changelog
----------
-
-### 1.1.1
-- Added interface support with `Function.implement()` and `Object.instanceof()`.
-- Added improved `Array.map()`.
-- Started to keep changelog.
-
 TODO
 ----
 
