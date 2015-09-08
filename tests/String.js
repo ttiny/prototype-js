@@ -128,3 +128,11 @@ Unitest( 'String.count()', function ( test ) {
 	test( 'asaad'.count( 'aa' ) == 1 );
 	test( 'aaa'.count( 'a' ) == 3 );
 } );
+
+
+Unitest( 'String.toFirstUpperCase()', function ( test ) {
+
+	test( 'asd'.toFirstUpperCase() == 'Asd' );
+	test( ' asd'.toFirstUpperCase() == ' asd' );
+	
+} );

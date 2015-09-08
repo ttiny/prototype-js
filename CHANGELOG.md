@@ -1,3 +1,6 @@
+### 1.2.0
+- Added `String.toFirstUpperCase`.
+
 ### 1.1.3
 - Removed `Function.bind()` JS implementation which was causing problems in some cases with node-inspector.
 

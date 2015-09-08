@@ -254,3 +254,17 @@ Object.defineProperty( String.prototype, 'count', {
 } );
 
 
+/**
+Converts the first letter of the string to upper case and returns the new string.
+
+@def function String.toFirstUpperCase ()
+@return String
+@author Borislav Peev <borislav.asdf@gmail.com>
+*/
+Object.defineProperty( String.prototype, 'toFirstUpperCase', { 
+	value: function ( search ) {
+		return this[ 0 ].toUpperCase() + this.slice( 1 );
+	},
+	writable: true
+} );
+

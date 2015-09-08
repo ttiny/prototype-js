@@ -131,7 +131,6 @@ if ( animal.instanceof( Earthling ) ) {
 TODO
 ----
 
-* `String.toCamelCase()` - to make the first letter upper case.
 * `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`
 * `Object.mergeDeep()`, `Array.mergeDeep()`
 * `Object.cmp()`, `Array.cmp()` (copy from unitest-js)
