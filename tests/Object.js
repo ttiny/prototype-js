@@ -9,6 +9,23 @@ Unitest( 'Object.merge()', function ( test ) {
 
 } );
 
+Unitest( 'Object.mergeDeep()', function ( test ) {
+
+	var a = { a: 2, b: 3 }.mergeDeep( { a: 3, b: { b11: 11, b22: 22 } , c: 4 } );
+	test( a.a === 3 );
+	test( a.b instanceof Object && a.b.b11 === 11 );
+	test( a.b instanceof Object && a.b.b22 === 22 );
+	test( a.c === 4 );
+	
+	var a = { a: 2, b: { b00: 0 } }.mergeDeep( { a: 3, b: { b11: 11, b22: 22 } , c: 4 } );
+	test( a.a === 3 );
+	test( a.b instanceof Object && a.b.b00 === 0 );
+	test( a.b instanceof Object && a.b.b11 === 11 );
+	test( a.b instanceof Object && a.b.b22 === 22 );
+	test( a.c === 4 );
+
+} );
+
 Unitest( 'Object.duplicate()', function ( test ) {
 
 	var a = { a: {}, b: 3 };

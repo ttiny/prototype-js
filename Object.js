@@ -51,7 +51,7 @@
 /**
  * Copies references of properties from another object to this one.
  * @def function Object.merge ( object )
- * @param object
+ * @param Object
  * @return this
  * @author Borislav Peev <borislav.asdf@gmail.com>
  */
@@ -67,6 +67,33 @@ Object.defineProperty( Object.prototype, 'merge', {
 	writable: true
 } );
 
+
+/**
+ * Copies references of properties from another object to this one recusively.
+ * If a property of this object that is not an Object is found in the object
+ * to be merged with, the property will be replaced.
+ * @def function Object.mergeDeep ( object )
+ * @param Object
+ * @return this
+ * @author Borislav Peev <borislav.asdf@gmail.com>
+ */
+Object.defineProperty( Object.prototype, 'mergeDeep', {
+	value: function ( object ) {
+		var keys = Object.getOwnPropertyNames( object );
+		for ( var i = 0, iend = keys.length; i < iend; ++i ) {
+			var key = keys[ i ];
+			var existing = this[ key ];
+			if ( Object.isObject( existing ) ) {
+				existing.mergeDeep( object[ key ] );
+			}
+			else {
+				this[ key ] = object[ key ];
+			}
+		}
+		return this;
+	},
+	writable: true
+} );
 
 
 /**

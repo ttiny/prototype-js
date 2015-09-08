@@ -132,7 +132,6 @@ TODO
 ----
 
 * `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`
-* `Object.mergeDeep()`, `Array.mergeDeep()`
 * `Object.cmp()`, `Array.cmp()` (copy from unitest-js)
 * `Array.diff()`
 * `RegExp.matchRecursive()`
