@@ -1,63 +1,12 @@
 "use strict";
 
-Unitest( 'Function.define()', function ( test ) {
+Unitest( 'Function.static()', function ( test ) {
 
 	var A = function () {};
-	A.define( { test: function () { return this.qwe; }, qwe: 5 } );
-	var a = new A();
-	test( a.test() === 5 );
-
-} );
-
-Unitest( 'Function.defineStatic()', function ( test ) {
-
-	var A = function () {};
-	A.defineStatic( { test: function () { return this.qwe; }, qwe: 5 } );
+	A.static( { test () { return this.qwe; }, qwe: 5 } );
 	var a = new A();
 	test( a.test === undefined );
 	test( A.test() == 5 );
-
-} );
-
-Unitest( 'Function.extend()', function ( test ) {
-
-	// test simple prototype
-	function A () {
-
-	}
-
-	A.extend( Array, {
-		size: function () {
-			return this.length;
-		}
-	} );
-
-	var a = new A();
-
-	test( a instanceof A );
-	test( a instanceof Array );
-	test( a.size() === 0 );
-
-	// test inheritance without own functions
-	function C () {
-
-	}
-
-	C.extend( Array );
-	C.prototype.test = 5;
-
-	var c = new C();
-	Array.prototype.test2 = 6;
-
-	test( c instanceof C );
-	test( c instanceof Array );
-	test( c.test === 5 );
-	test( Array.prototype.test === undefined );
-	test( [].test === undefined );
-	test( c.test2 === 6 );
-
-	delete Array.prototype.test2;
-
 
 } );
 
@@ -116,26 +65,26 @@ Unitest( 'Function.mixin()/Object.instanceof', function ( test ) {
 	B.mixin( { a: 12 }, ResolveMixins( {'a': B} ) );
 	test( new B().a == 11 );
 
-	var IFace1 = function () {};
-	IFace1.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {},
-	} );
+	class IFace1 {
+		iface1_decl () {}
+		iface2_decl () {}
+	}
 	
-	var IFace2 = function () {};
-	IFace2.extend( IFace1, {
-		iface3_decl: function () {}
-	} );
+	class IFace2 extends IFace1 {
 
-	var TTrait1 = function () {}
-	TTrait1.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {}
-	} );
-	var TTrait2 = function () {};
-	TTrait2.define( {
-		iface3_decl: function () {},
-	} );
+		iface3_decl () {}
+	}
+	
+	class TTrait1 {
+		constructor () {}
+		iface1_decl () {}
+		iface2_decl () {}
+	}
+	
+	class TTrait2 {
+		constructor () {}
+		iface3_decl () {}
+	}
 
 	var A = function () {};
 	A.mixin( TTrait1 );
@@ -178,73 +127,73 @@ Unitest( 'Function.mixin()/Object.instanceof', function ( test ) {
 
 Unitest( 'Function.implement/Object.instanceof', function ( test ) {
 
-	var IFace1 = function () {'iface1';};
-	IFace1.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {},
-	} );
+	class IFace1 {
+		constructor () {'iface1';}
+		iface1_decl () {}
+		iface2_decl () {}
+	}
 	
-	var IFace2 = function () {'iface2';};
-	IFace2.extend( IFace1, {
-		iface3_decl: function () {}
-	} );
-
-	var A = function () {};
+	class IFace2 extends IFace1 {
+		constructor () { 'iface2'; }
+		iface3_decl () {}
+	}
+	
+	var A = class {};
 	var caught = false;
 	try { A.implement( IFace1 ); }
 	catch ( e ) { caught = true; }
 	test( caught );
 
-	var A = function () {};
-	A.define( {
-		iface1_decl: function () {},
-		iface2_decl: 'notfn',
-	} );
+	var A = class { 
+		constructor () {}
+		iface1_decl () {}
+	}
+	A.prototype.iface2_decl = 'notfn';
 
 	var caught = false;
 	try { A.implement( IFace1 ); }
 	catch ( e ) { caught = true; }
 	test( caught );
 
-	var A = function () {};
-	A.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {},
-	} );
+	var A = class { 
+		constructor () {}
+		iface1_decl () {}
+		iface2_decl () {}
+	}
 
 	var caught = false;
 	try { A.implement( IFace1 ); }
 	catch ( e ) { caught = true; }
 	test( !caught );
 
-	var A = function () {};
-	A.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {},
-	} );
+	var A = class { 
+		constructor () {}
+		iface1_decl () {}
+		iface2_decl () {}
+	}
 
 	var caught = false;
 	try { A.implement( IFace2 ); }
 	catch ( e ) { caught = true; }
 	test( caught );
 
-	var A = function () {};
-	A.define( {
-		iface1_decl: function () {},
-		iface3_decl: function () {},
-	} );
+	var A = class { 
+		constructor () {}
+		iface1_decl () {}
+		iface3_decl () {}
+	}
 
 	var caught = false;
 	try { A.implement( IFace2 ); }
 	catch ( e ) { caught = true; }
 	test( caught );
 
-	var A = function () {};
-	A.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {},
-		iface3_decl: function () {},
-	} );
+	var A = class { 
+		constructor () {}
+		iface1_decl () {}
+		iface2_decl () {}
+		iface3_decl () {}
+	}
 
 	var caught = false;
 	try { A.implement( IFace2 ); }
@@ -254,16 +203,15 @@ Unitest( 'Function.implement/Object.instanceof', function ( test ) {
 	test( (new A).instanceof( IFace2 ) );
 	test( (new A).instanceof( IFace1 ) );
 
-	var A = function () {};
-	A.define( {
-		iface1_decl: function () {},
-		iface2_decl: function () {},
-	} );
-	var B = function () {};
-	B.extend( A, {
-		iface3_decl: function () {},
-	} );
-
+	var A = class { 
+		constructor () {}
+		iface1_decl () {}
+		iface2_decl () {}
+	}
+	class B extends A {
+		iface3_decl () {}
+	}
+	
 	var caught = false;
 	try { A.implement( IFace1 ); }
 	catch ( e ) { caught = true; }
