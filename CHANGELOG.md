@@ -1,3 +1,6 @@
+### 1.4.0
+- Require Node.js >= 4.0.0.
+
 ### 1.3.0
 - Added `Object.mergeDeep`.
 
