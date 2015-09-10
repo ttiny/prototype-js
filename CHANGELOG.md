@@ -1,6 +1,5 @@
 ### 1.4.0
 - Require Node.js >= 4.0.0.
-- Remove `Funtion.define()` and `Funtion.extend()` - we have classes now.
 - Rename `Function.defineStatic()` to `Function.static()`.
 
 ### 1.3.0

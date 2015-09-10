@@ -19,42 +19,44 @@ npm install https://github.com/Perennials/prototype-js/tarball/master
 ### Quick OOP example
 
 ```js
+"use strict";
+
 // this modifies the global built in objects, it does not export anything
 // only needs to be included once
 require( 'Prototype' );
 
 // classes
-function Earthling () {
-	this._init = 1;
-}
 
-Earthling.define( {
+class Earthling {
 
-	getType: function () {
+	constructor () {
+		this._init = 1;
+	}
+
+	getType () {
 		return 'Earthling';
 	}
 
-} );
+}
 
 var earthling = new Earthling();
 
 // inheritance
-function Animal () {
-	// call the base constructor
-	Earthling.call( this );
+class Animal extends Earthling {
 
-	// call the constructor of the mixin
-	TLeggedEarthling.call( this, 5 );
-}
+	constructor () {
+		// call the base constructor
+		super();
 
-Animal.extend( Earthling, {
-
-	getType: function () {
+		// call the constructor of the mixin
+		TLeggedEarthling.call( this, 5 );
+	}
+	
+	getType () {
 		return 'Animal';
 		// || we could call the parent method Earthling.prototype.getType.call( this );
 	}
-
-} );
+}
 
 // intefaces (experimental)
 

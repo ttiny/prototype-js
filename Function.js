@@ -1,6 +1,24 @@
 "use strict";
 
 /**
+ * Defines properties in the prototype of the function.
+ * Each property will be added using Object.definePrototype.
+ * @def function Function.define ( properties )
+ * @param object Collection of properties.
+ * @return this
+ */
+Object.defineProperty( Function.prototype, 'define', { 
+	value: function ( prototype ) {
+		var proto = this.prototype;
+		for ( var i in prototype ) {
+			Object.defineProperty( proto, i, { value: prototype[i], writable: true } );
+		}
+		return this;
+	},
+	writable: true
+} );
+
+/**
  * Defines properties in the the function object itself.
  * Each property will be added using Object.definePrototype.
  * @def function Function.static ( properties )
@@ -12,6 +30,23 @@ Object.defineProperty( Function.prototype, 'static', {
 		for ( var i in prototype ) {
 			Object.defineProperty( this, i, { value: prototype[i], writable: true } );
 		}
+		return this;
+	},
+	writable: true
+} );
+
+
+/**
+ * Will make functions's prototype to inherit from given parent's prototype.
+ * @def static function Function.extend ( parent, prototype )
+ * @param Function
+ * @param Object|undefined Prototype for the class itself.
+ * @return this
+ */
+Object.defineProperty( Function.prototype, 'extend', { 
+	value: function ( parent, prototype ) {
+		this.prototype = Object.create( parent.prototype );
+		this.define( prototype );
 		return this;
 	},
 	writable: true

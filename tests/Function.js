@@ -1,5 +1,14 @@
 "use strict";
 
+Unitest( 'Function.define()', function ( test ) {
+
+	var A = function () {};
+	A.define( { test: function () { return this.qwe; }, qwe: 5 } );
+	var a = new A();
+	test( a.test() === 5 );
+
+} );
+
 Unitest( 'Function.static()', function ( test ) {
 
 	var A = function () {};
@@ -7,6 +16,48 @@ Unitest( 'Function.static()', function ( test ) {
 	var a = new A();
 	test( a.test === undefined );
 	test( A.test() == 5 );
+
+} );
+
+Unitest( 'Function.extend()', function ( test ) {
+
+	// test simple prototype
+	function A () {
+
+	}
+
+	A.extend( Array, {
+		size: function () {
+			return this.length;
+		}
+	} );
+
+	var a = new A();
+
+	test( a instanceof A );
+	test( a instanceof Array );
+	test( a.size() === 0 );
+
+	// test inheritance without own functions
+	function C () {
+
+	}
+
+	C.extend( Array );
+	C.prototype.test = 5;
+
+	var c = new C();
+	Array.prototype.test2 = 6;
+
+	test( c instanceof C );
+	test( c instanceof Array );
+	test( c.test === 5 );
+	test( Array.prototype.test === undefined );
+	test( [].test === undefined );
+	test( c.test2 === 6 );
+
+	delete Array.prototype.test2;
+
 
 } );
 
