@@ -11,7 +11,7 @@
     "test": "node ./tests/tests.js"
   },
   "devDependencies": {
-    "Unitest": "https://github.com/perennials/unitest-js/tarball/1.7.0"
+    "Unitest": "https://github.com/perennials/unitest-js/tarball/master"
   },
   "repository": {
     "type": "git",
