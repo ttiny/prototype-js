@@ -1,3 +1,7 @@
+### 1.6.0
+- Added `String.contains()`.
+- Added `Array.contains()`.
+
 ### 1.5.2
 - Fix `Object.newArgs()` with ES6 classes.
 - **Breaking:** `Object.newArgs()` will always return an instance of the
