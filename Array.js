@@ -52,48 +52,6 @@ Object.defineProperty( Array.prototype, 'last', {
 	}
 } );
 
-/**
-Performs a callback on every item of the array.
-
-@def function Array.map ( callback, thisArg )
-@param MapCallback|string|int If `string` or `int` is provided, `map()` will
-    atempt to find property with the same name for each of the items of the
-    array and call it as callback.
-@param Object Object to be used as `this` object for the callback. Not
-    applicable if the callback is a string.
-@return Array New array containing the results of the callbacks.
-@author Borislav Peev <borislav.asdf@gmail.com>
-*/
-
-/**
-A callback passed to {Array.map()}.
-
-@def callback MapCallback ( item, index, array )
-@param mixed
-@param int
-@param Array
-*/
-Object.defineProperty( Array.prototype, '__map', {
-	value: Array.prototype.map,
-	writable: false
-} );
-
-Object.defineProperty( Array.prototype, 'map', { value: function ( callback, thisArg ) {
-		if ( callback instanceof Function ) {
-			return this.__map( callback, thisArg );
-		}
-
-		var iend = this.length;
-		var ret = new Array( iend );
-		for ( var i = 0; i < iend; ++i ) {
-			var item = this[ i ];
-			ret[ i ] = item[ callback ]( item, i, this );
-		}
-		return ret;
-	},
-	writable: false
-} );
-
 
 Object.defineProperty( Array.prototype, 'contains', { value: function ( value ) {
 		return this.indexOf( value ) >= 0;

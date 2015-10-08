@@ -1,3 +1,6 @@
+### 1.8.0
+- Removed `Array.map( String )` since ES6 has arrow functions which make this not so necessary.
+
 ### 1.7.0
 - Added `Array.unique()`.
 
