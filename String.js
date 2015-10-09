@@ -270,6 +270,6 @@ Object.defineProperty( String.prototype, 'toFirstUpperCase', {
 
 Object.defineProperty( String.prototype, 'contains', {
 	value: String.prototype.includes,
-	writable: false
+	writable: true
 } );
 

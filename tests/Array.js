@@ -73,3 +73,26 @@ Unitest( 'Array.unique()', function ( test ) {
 	test.eq( [ 1, "asd", d, c, c ].unique(), [ 1, "asd", d, c ] );
 
 } );
+
+
+Unitest( 'Array.indexOf()', function ( test ) {
+
+	test.eq( [ 1, 2, 3, 3, 2, 1 ].indexOfEx( 3 ), 2 );
+	test.eq( [ 1, 2, 3, 3, 2, 1 ].indexOfEx( it => it / 3 == 1 ), 2 );
+
+} );
+
+
+Unitest( 'Array.lastIndexOf()', function ( test ) {
+
+	test.eq( [ 1, 2, 3, 3, 2, 1 ].lastIndexOfEx( 3 ), 3 );
+	test.eq( [ 1, 2, 3, 3, 2, 1 ].lastIndexOfEx( it => it / 3 == 1 ), 3 );
+
+} );
+
+Unitest( 'Array.containsEx()', function ( test ) {
+
+	test.eq( [ 1, 2, 3, 3, 2, 1 ].containsEx( 3 ), true );
+	test.eq( [ 1, 2, 3, 3, 2, 1 ].containsEx( it => it / 3 == 1 ), true );
+
+} );

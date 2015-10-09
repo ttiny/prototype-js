@@ -11,3 +11,4 @@ require( './String.js' );
 require( './Function.js' );
 require( './Number.js' );
 require( './Boolean.js' );
+require( './RegExp.js' );

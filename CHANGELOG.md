@@ -1,3 +1,7 @@
+### 1.9.0
+- Added `Array.indexOfEx()` and `Array.lastIndexOfEx()`.
+- Added `static RegExp.matchRecursive()`, `RegExp.pushIndex()`, `RegExp.popIndex()`, `RegExp.resetIndex()`.
+
 ### 1.8.0
 - Removed `Array.map( String )` since ES6 has arrow functions which make this not so necessary.
 

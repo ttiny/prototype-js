@@ -6,17 +6,130 @@ Most notably this module provides better OOP support with classes,
 inheritance, mixins and interfaces with no runtime overhead, staying
 as close as possible to the native JS syntax.
 
-The module is documented, unfortunately with docs comments in [jsdocgen](https://github.com/Perennials/jsdocgen)
-format, and the JS support there is somehow WIP ...but rather planned.
-
-But there are plenty of examples for the brave. The module is used in production
-in several projects.
-
 ```
 npm install https://github.com/Perennials/prototype-js/tarball/master
 ```
 
-### Quick OOP example
+<!-- MarkdownTOC -->
+
+- [Array](#array)
+	- [.duplicate()](#duplicate)
+	- [.merge()](#merge)
+	- [get/set .last](#getset-last)
+	- [.contains()](#contains)
+	- [.containsEx()](#containsex)
+	- [.unique()](#unique)
+	- [.indexOfEx()](#indexofex)
+	- [.indexOfEx()](#indexofex-1)
+- [Object](#object)
+- [Function](#function)
+- [String](#string)
+- [Number](#number)
+- [Boolean](#boolean)
+- [RegExp](#regexp)
+- [Quick OOP example](#quick-oop-example)
+- [TODO](#todo)
+- [Authors](#authors)
+
+<!-- /MarkdownTOC -->
+
+
+## Array
+
+
+### .duplicate()
+Creates array with duplicates of the items of this array. This function works
+recursively and will call `.duplicate()` for the items that implement this
+function.
+
+```js
+.duplicate() : Array;
+```
+
+
+### .merge()
+This is alias for `.concat()`.
+
+
+### get/set .last
+Retrieves or sets the last element of the array.
+Returns `undefined` if attempting to get the last element of zero-length array.
+
+
+### .contains()
+Checks if the array contains specific value. Uses `.indexOf()` internally.
+
+```js
+.contains(
+	value:any
+) : Boolean;
+```
+
+
+### .containsEx()
+Checks if the array contains specific value, possibly with comparison callback.
+
+```js
+.contains(
+	value:any|function( item:any, index:Number, array:Array )
+) : Boolean;
+```
+
+### .unique()
+Returns a new array containing a uniqie set of the elements of the array.
+Meaning if some element appears twice it will be present only once in the
+resulting array. Items are compared with `===`.
+
+```js
+.unique(
+	value:any
+) : Boolean;
+```
+
+### .indexOfEx()
+Searches the array for an element. This is analogous to `.indexOf()`,
+except that if the value to search for is a `Function` it will be used
+as comparison callback.
+
+```js
+.indexOfEx(
+	value:any|function( item:any, index:Number, array:Array ):Boolean
+	offset:Number|undefined
+) : Boolean;
+```
+
+### .indexOfEx()
+Searches the array for an element backwards. This is analogous to `.lastIndexOf()`,
+except that if the value to search for is a `Function` it will be used
+as comparison callback.
+
+```js
+.lastIndexOfEx(
+	value:any|function( item:any, index:Number, array:Array ):Boolean
+	offset:Number|undefined
+) : Boolean;
+```
+
+## Object
+WIP
+
+## Function
+WIP
+
+## String
+WIP
+
+## Number
+WIP
+
+## Boolean
+WIP
+
+## RegExp
+WIP
+
+
+## Quick OOP example
 
 ```js
 "use strict";
@@ -133,12 +246,10 @@ if ( animal.instanceof( Earthling ) ) {
 TODO
 ----
 
-* `Array.indexOf/lastIndexOf(item[,offset][,compare_callback])`
 * `Object.cmp()`, `Array.cmp()` (copy from unitest-js)
 * `Array.diff()`
-* `RegExp.matchRecursive()`
-* `RegExp.pushIndex/popIndex()` - sometimes RegExp is buggy and won't reset
-  lastIndex for even new strings. This will save the lastIndex and reset it so
-  the regexp can be reused safely without losing current position.
-* `RegExp.resetIndex()`
 
+Authors
+-------
+
+Borislav Peev (borislav.asdf at gmail dot com)
