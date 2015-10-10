@@ -72,6 +72,9 @@ Unitest( 'Object.newArgs()', function ( test ) {
 	test( Object.newArgs( B, [ 1, 2 ] ) instanceof B );
 	test( Object.newArgs( C, [ 1, 2 ] ) instanceof C );
 	test( Object.newArgs( C, [ 1, 2 ] ).a === 2 );
+	test.eq( Object.newArgs( Array, [ 1, 2 ] ), [ 1, 2 ] );
+	test( Object.newArgs( Array, [ 2 ] ).length == 2 );
+	test.eq( Object.newArgs( Array, [ 2 ] ), [ undefined, undefined ] );
 
 } );
 

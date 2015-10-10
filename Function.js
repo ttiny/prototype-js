@@ -71,8 +71,44 @@ function ResolveMixins ( resolve ) {
 }
 
 (function () {
+
+	var proto__implements = new WeakMap();
+	var obj_checkImplementation = function ( proto, clas ) {
+		if ( !proto__implements.has( proto ) ) {
+			return false;
+		}
+		
+		var __implements = proto__implements.get( proto );
+		for ( var i = __implements.length - 1; i >= 0; --i ) {
+			if ( clas === __implements[ i ] ) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	Object.defineProperty( Object.prototype, 'instanceof', {
+		value: function ( clas ) {
+			// this crashes if not used with functions, can be fixed but not worth the performance cost
+			if ( this instanceof clas ) {
+				return true;
+			}
+
+			var proto = Object.getPrototypeOf( this );
+			
+			do {
+				if ( obj_checkImplementation( proto, clas ) ) {
+					return true;
+				}
+				proto = Object.getPrototypeOf( proto );
+			} while ( proto );
+
+			return false;
+		},
+		writable: true
+	} );
 	
-	var _checkImplementation = function ( clas, iface ) {
+	var func_checkImplementation = function ( clas, iface ) {
 		var names = Object.getOwnPropertyNames( iface );
 		for ( var j = 0, jend = names.length; j < jend; ++j ) {
 			var name = names[ j ];
@@ -85,55 +121,41 @@ function ResolveMixins ( resolve ) {
 	};
 
 	var _markImplemented = function ( obj, proto ) {
-		if ( !obj.prototype.hasOwnProperty( '__implements' ) ) {
-			Object.defineProperty( obj.prototype, '__implements', { value: [], writable: false } );
+		if ( !proto__implements.has( obj.prototype ) ) {
+			proto__implements.set( obj.prototype, [] );
 		}
 		
-		var __implements = obj.prototype.__implements;
+		var __implements = proto__implements.get( obj.prototype );
 		do {
 			__implements.push( proto );
 			if ( proto.prototype === undefined ) {
 				break;
 			}
-			proto = Object.getPrototypeOf( proto.prototype ).constructor;
-			if ( proto === Object ||
-			     proto === Array ||
-			     proto === Function ||
-			     proto === String ||
-			     proto === Number ||
-			     proto === Boolean ) {
-				
-				break;
+			proto = Object.getPrototypeOf( proto.prototype );
+			if ( proto ) {
+				proto = proto.constructor;
 			}
 		} while ( proto );
 	};
 
-	Object.defineProperty( Function.prototype, 'implement', { value: function () {
+	Object.defineProperty( Function.prototype, 'implement', {
+		value: function () {
 			for ( var i = 0, iend = arguments.length; i < iend; ++i ) {
 				var proto = arguments[ i ];
 				
 				_markImplemented( this, proto );
 
 				do {
-					_checkImplementation( this.prototype, proto.prototype || proto );
+					func_checkImplementation( this.prototype, proto.prototype || proto );
 					// skip built ins
 					if ( proto.prototype === undefined ) {
 						break;
 					}
 					proto = Object.getPrototypeOf( proto.prototype );
-					if ( proto === Object ||
-					     proto === Array ||
-					     proto === Function ||
-					     proto === String ||
-					     proto === Number ||
-					     proto === Boolean ) {
-						
-						break;
-					}
 				} while ( proto );
 			}
 		},
-		writable: false
+		writable: true
 	} );
 
 	/**
@@ -147,8 +169,8 @@ function ResolveMixins ( resolve ) {
 		value: function () {
 			var arglen = arguments.length - 1;
 			var resolve;
-			if ( arglen > 0 && arguments[arglen] instanceof ResolveMixins ) {
-				resolve = arguments[arglen];
+			if ( arglen > 0 && arguments[ arglen ] instanceof ResolveMixins ) {
+				resolve = arguments[ arglen ];
 			}
 			else {
 				++arglen;
@@ -167,21 +189,18 @@ function ResolveMixins ( resolve ) {
 					if ( isProto && key === 'constructor' ) {
 						continue;
 					}
-					if ( key === '__implements' ) {
-						continue;
-					}
 					var value = undefined;
 					if ( this.prototype[key] !== undefined ) {
 						if ( resolve && resolve[key] !== undefined ) {
 							var preffered = resolve[key];
-							value = preffered.prototype ? preffered.prototype[key] : preffered[key];
+							value = preffered.prototype ? preffered.prototype[ key ] : preffered[ key ];
 						}
 						if ( !value ) {
 							throw new Error( 'Unable to mixin property "' + key + '", it is already defined' );
 						}
 					}
 					else {
-						value = prototype[key];
+						value = prototype[ key ];
 					}
 					Object.defineProperty( this.prototype, key, { value: value, writable: true } );
 				}
@@ -193,6 +212,10 @@ function ResolveMixins ( resolve ) {
 })();
 
 
+(function () {
+	var slice = Array.prototype.slice;
+	var concat = Array.prototype.concat;
+	
 /**
  * Creates a wrapper function that always calls another function with the same arguments.
  * Bound arguments will be appended to any arguments that the function is called with.
@@ -201,20 +224,16 @@ function ResolveMixins ( resolve ) {
  * @return function
  * @author Borislav Peev <borislav.asdf@gmail.com>
  */
-Object.defineProperty( Function.prototype, 'bindArgsAfter', { 
-	value: function () {
-		var func = this;
-		var slice = Array.prototype.slice;
-		var concat = Array.prototype.concat;
-		var args = slice.call( arguments );
-		return function ( ) {
-			return func.apply( this, arguments.length ? concat.call( slice.call( arguments, 0 ), args ) : args );
-		};
-	},
-	writable: true
-} );
-
-
+	Object.defineProperty( Function.prototype, 'bindArgsAfter', { 
+		value: function () {
+			var func = this;
+			var args = slice.call( arguments );
+			return function ( ) {
+				return func.apply( this, arguments.length ? concat.call( slice.call( arguments, 0 ), args ) : args );
+			};
+		},
+		writable: true
+	} );
 
 /**
  * Creates a wrapper function that always calls another function with the same arguments.
@@ -224,18 +243,20 @@ Object.defineProperty( Function.prototype, 'bindArgsAfter', {
  * @return function
  * @author Borislav Peev <borislav.asdf@gmail.com>
  */
-Object.defineProperty( Function.prototype, 'bindArgsBefore', { 
-	value: function () {
-		var func = this;
-		var slice = Array.prototype.slice;
-		var concat = Array.prototype.concat;
-		var args = slice.call( arguments );
-		return function ( ) {
-			return func.apply( this, arguments.length ? concat.call( args, slice.call( arguments, 0 ) ) : args );
-		};
-	},
-	writable: true
-} );
+	Object.defineProperty( Function.prototype, 'bindArgsBefore', { 
+		value: function () {
+			var func = this;
+			var args = slice.call( arguments );
+			return function ( ) {
+				return func.apply( this, arguments.length ? concat.call( args, slice.call( arguments, 0 ) ) : args );
+			};
+		},
+		writable: true
+	} );
+
+})();
+
+
 
 
 

@@ -1,6 +1,8 @@
 Prototype
 =========
-Extensions to the JavaScript standard library for Node.js and browser.
+Extensions to the JavaScript standard library for Node.js and browser (the
+browser support is in untested state since the library transition to ES6, but
+probably still works).
 
 Most notably this module provides better OOP support with classes,
 inheritance, mixins and interfaces with no runtime overhead, staying
@@ -12,16 +14,24 @@ npm install https://github.com/Perennials/prototype-js/tarball/master
 
 <!-- MarkdownTOC -->
 
-- [Array](#array)
-	- [.duplicate()](#duplicate)
+- [Object](#object)
 	- [.merge()](#merge)
+	- [.mergeDeep()](#mergedeep)
+	- [.duplicate()](#duplicate)
+	- [.filter()](#filter)
+	- [.instanceof()](#instanceof)
+	- [Object.isObject()](#objectisobject)
+	- [Object.newArgs()](#objectnewargs)
+	- [Object.values()](#objectvalues)
+- [Array](#array)
 	- [get/set .last](#getset-last)
+	- [.duplicate()](#duplicate-1)
+	- [.merge()](#merge-1)
+	- [.unique()](#unique)
 	- [.contains()](#contains)
 	- [.containsEx()](#containsex)
-	- [.unique()](#unique)
 	- [.indexOfEx()](#indexofex)
 	- [.indexOfEx()](#indexofex-1)
-- [Object](#object)
 - [Function](#function)
 - [String](#string)
 - [Number](#number)
@@ -33,9 +43,119 @@ npm install https://github.com/Perennials/prototype-js/tarball/master
 
 <!-- /MarkdownTOC -->
 
+## Object
+
+### .merge()
+Copies references of properties from another object to this one.
+
+```js
+.merge(
+	obj:Object
+) : this;
+```
+
+### .mergeDeep()
+Copies references of properties from another object to this one recusively.
+If a property of this object that is not an `Object` is found in the object
+to be merged with, the property will be replaced.
+
+```js
+.mergeDeep(
+	obj:Object
+) : this;
+```
+
+### .duplicate()
+Creates object with duplicates of the properties of this object. This function
+works recursively and will call `.duplicate()` for the properties that implement
+this function. Objects of custom classes will not be duplicated but passed as
+reference.
+
+```js
+.duplicate() : Object;
+```
+
+### .filter()
+Filters out all properties for which the callback is not true. This function
+will modify the object in place. While this behaviour is inconsistent, it is
+necassary for the function to be able to work on any object without knowledge
+how to construct a new instance of the object's class and copy its properties.
+
+```js
+.filter(
+	callback:function( value:any, key:String, object:Object ),
+	thisArg:mixed|undefined
+) : this;
+```
+
+### .instanceof()
+**Experimental.** Checks if the object is instanceof certain class. This
+function first tries to use the `instanceof` operator, and if it fails, it
+checks the list of implemented interfaces. Therefore this function has
+performnace overhead over the `instanceof` operator. See
+[.implement()](#implement), [.mixin()](#mixin) and [Quick OOP example](#quick-oop-example).
+
+```js
+.instanceof(
+	proto:Function
+) : Boolean;
+```
+
+### Object.isObject()
+Checks if the argument is strictly an `Object` and not a subclass of `Object`.
+
+```js
+Object.isObject(
+	obj:any
+) : Boolean;
+```
+
+### Object.newArgs()
+Creates a new object passing a list of arguments to the constructor.
+Credits <http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible>.
+
+This is equivalent to `Function.apply()` but for `new`. So one can invoke `new` on some class with
+array list of arguments, e.g.:
+
+```js
+// this
+Object.newArgs( Array, [ 1, 2 ] );
+// is equivalent to this
+new Array( 1, 2 );
+```
+
+```js
+Object.newArgs(
+	ctor:Function,
+	args:Array
+) : Object;
+```
+
+### Object.values()
+Retrieves the values of all own properties of an object.
+
+```js
+Object.values(
+	obj:Object
+) : String[];
+```
+
 
 ## Array
 
+### get/set .last
+Retrieves or sets the last element of the array.
+Returns `undefined` if attempting to get the last element of zero-length array.
+
+Example:
+
+```js
+var arr = [ 1, 2 ];
+if ( arr.last === 2 ) {
+	arr.last = 3;
+	// now the array is [ 1, 3 ]
+}
+```
 
 ### .duplicate()
 Creates array with duplicates of the items of this array. This function works
@@ -51,9 +171,16 @@ function.
 This is alias for `.concat()`.
 
 
-### get/set .last
-Retrieves or sets the last element of the array.
-Returns `undefined` if attempting to get the last element of zero-length array.
+### .unique()
+Returns a new array containing a uniqie set of the elements of the array.
+Meaning if some element appears twice it will be present only once in the
+resulting array. Items are compared with `===`.
+
+```js
+.unique(
+	value:any
+) : Boolean;
+```
 
 
 ### .contains()
@@ -75,16 +202,6 @@ Checks if the array contains specific value, possibly with comparison callback.
 ) : Boolean;
 ```
 
-### .unique()
-Returns a new array containing a uniqie set of the elements of the array.
-Meaning if some element appears twice it will be present only once in the
-resulting array. Items are compared with `===`.
-
-```js
-.unique(
-	value:any
-) : Boolean;
-```
 
 ### .indexOfEx()
 Searches the array for an element. This is analogous to `.indexOf()`,
@@ -110,8 +227,6 @@ as comparison callback.
 ) : Boolean;
 ```
 
-## Object
-WIP
 
 ## Function
 WIP
@@ -190,6 +305,8 @@ catch ( e ) {
 
 // mixins
 
+// we use the function (ES5) syntax here to be able to reuse it later,
+// because ES6 forbids calling the constructor of a class without new
 function TLeggedEarthling ( nlegs ) {
 	this._nLegs = nlegs;
 }

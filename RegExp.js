@@ -87,20 +87,29 @@ Object.defineProperty( RegExp.prototype, 'resetIndex', {
 	writable: true
 } );
 
-Object.defineProperty( RegExp.prototype, 'pushIndex', {
-	value: function () {
-		var stack = this._indexStack;
-		if ( stack === undefined ) {
-			stack = (this._indexStack = []);
-		}
-		stack.push( this.lastIndex );
-	},
-	writable: true
-} );
+(function () {
 
-Object.defineProperty( RegExp.prototype, 'popIndex', {
-	value: function () {
-		this.lastIndex = this._indexStack.pop() || 0;
-	},
-	writable: true
-} );
+	var _indexStack = new WeakMap();
+	Object.defineProperty( RegExp.prototype, 'pushIndex', {
+		value: function () {
+			var stack;
+			if ( !_indexStack.has( this ) ) {
+				stack = [];
+				_indexStack.set( this, stack );
+			}
+			else {
+				 stack = _indexStack.get( this );
+			}
+			stack.push( this.lastIndex );
+		},
+		writable: true
+	} );
+
+	Object.defineProperty( RegExp.prototype, 'popIndex', {
+		value: function () {
+			this.lastIndex = _indexStack.get( this ).pop() || 0;
+		},
+		writable: true
+	} );
+
+})();
