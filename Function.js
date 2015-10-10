@@ -1,30 +1,16 @@
 "use strict";
 
-/**
- * Defines properties in the prototype of the function.
- * Each property will be added using Object.definePrototype.
- * @def function Function.define ( properties )
- * @param object Collection of properties.
- * @return this
- */
 Object.defineProperty( Function.prototype, 'define', { 
 	value: function ( prototype ) {
 		var proto = this.prototype;
 		for ( var i in prototype ) {
-			Object.defineProperty( proto, i, { value: prototype[i], writable: true } );
+			Object.defineProperty( proto, i, { value: prototype[ i ], writable: true } );
 		}
 		return this;
 	},
 	writable: true
 } );
 
-/**
- * Defines properties in the the function object itself.
- * Each property will be added using Object.definePrototype.
- * @def function Function.static ( properties )
- * @param object Collection of properties.
- * @return this
- */
 Object.defineProperty( Function.prototype, 'static', { 
 	value: function ( prototype ) {
 		for ( var i in prototype ) {
@@ -36,13 +22,6 @@ Object.defineProperty( Function.prototype, 'static', {
 } );
 
 
-/**
- * Will make functions's prototype to inherit from given parent's prototype.
- * @def static function Function.extend ( parent, prototype )
- * @param Function
- * @param Object|undefined Prototype for the class itself.
- * @return this
- */
 Object.defineProperty( Function.prototype, 'extend', { 
 	value: function ( parent, prototype ) {
 		this.prototype = Object.create( parent.prototype );
@@ -52,17 +31,6 @@ Object.defineProperty( Function.prototype, 'extend', {
 	writable: true
 } );
 
-
-
-/**
-Passed as last argument to {@see Function.mixin()} to resolve conflicts.
-
-```javascript
-A.mixin( B, C, ResolveMixins( { 'overlappingMember':  B } ) );
-```
-
-@def function ResolveMixins ( resolve:Object )
-*/
 function ResolveMixins ( resolve ) {
 	if ( !(this instanceof ResolveMixins) ) {
 		return new ResolveMixins( resolve );
@@ -158,13 +126,6 @@ function ResolveMixins ( resolve ) {
 		writable: true
 	} );
 
-	/**
-	Mixes the prototype of another function into the prototype of this function.
-
-	@def static function Function.mixin( mixinPrototype, ... )
-	@param Object
-	@return this
-	*/
 	Object.defineProperty( Function.prototype, 'mixin', { 
 		value: function () {
 			var arglen = arguments.length - 1;
@@ -216,14 +177,6 @@ function ResolveMixins ( resolve ) {
 	var slice = Array.prototype.slice;
 	var concat = Array.prototype.concat;
 	
-/**
- * Creates a wrapper function that always calls another function with the same arguments.
- * Bound arguments will be appended to any arguments that the function is called with.
- * @def function Function.bindArgsAfter ( ... )
- * @vaarg
- * @return function
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 	Object.defineProperty( Function.prototype, 'bindArgsAfter', { 
 		value: function () {
 			var func = this;
@@ -235,14 +188,6 @@ function ResolveMixins ( resolve ) {
 		writable: true
 	} );
 
-/**
- * Creates a wrapper function that always calls another function with the same arguments.
- * Bound arguments will be prepended to any arguments that the function is called with.
- * @def function Function.bindArgsBefore ( ... )
- * @vaarg
- * @return function
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 	Object.defineProperty( Function.prototype, 'bindArgsBefore', { 
 		value: function () {
 			var func = this;
@@ -255,9 +200,6 @@ function ResolveMixins ( resolve ) {
 	} );
 
 })();
-
-
-
 
 
 if ( typeof global !== 'undefined' ) {

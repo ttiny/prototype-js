@@ -1,12 +1,5 @@
 "use strict";
 
-/**
- * Checks if argument is a string.
- * This function checks for both typeof and instanceof
- * to make sure the argument is a string.
- * @def static function String.isString ( string )
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 Object.defineProperty( String, 'isString', { 
 	value: function ( str ) {
 		return typeof str == 'string' || str instanceof String;
@@ -14,20 +7,6 @@ Object.defineProperty( String, 'isString', {
 	writable: true
 } );
 
-
-
-
-/**
- * Extends the built-in {String.indexOfEx} with support of {RegExp}.
- *
- * @def function String.indexOfEx ( search:string|RegExp, offset:int = 0, out:Object = undefined )
- *
- * @param string|RegExp Subject to search for.
- * @param int Offset to start the search at.
- * @param Object Optional object to receive the matched subject's length in its `length` property.
- * @return int -1 if the search value is not found.
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 
 Object.defineProperty( String.prototype, 'indexOfEx', { 
 	value: function ( search, offset, out ) {
@@ -72,20 +51,6 @@ Object.defineProperty( String.prototype, 'indexOfEx', {
 	writable: true
 } );
 
-
-
-
-/**
- * Extends the built-in {String.lastIndexOfEx} with support of {RegExp}.
- *
- * @def function String.lastIndexOfEx ( search:string|RegExp, offset:int = this.length, out:Object = undefined )
- *
- * @param string|RegExp Subject to search for.
- * @param int Offset to start the search at.
- * @param Object Optional object to receive the matched subject's length in its `length` property.
- * @return int -1 if the search value is not found.
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 
 Object.defineProperty( String.prototype, 'lastIndexOfEx', { 
 	value: function ( search, offset, out ) {
@@ -136,20 +101,10 @@ Object.defineProperty( String.prototype, 'lastIndexOfEx', {
 } );
 
 
-
-
-/**
- * Splits a string on the first occurence of substring.
- * @def function String.splitFirst ( search:string|RegExp )
- * @return object Object will have two properties -
- * 'left', which could be reference to the original string, and 'right' which could be undefined.
- * * Both properties can be empty string.
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 Object.defineProperty( String.prototype, 'splitFirst', { 
-	value: function ( search ) {
+	value: function ( search, offset ) {
 		var ret = { left: this, right: undefined, length: 0 };
-		var i = this.indexOfEx( search, undefined, ret );
+		var i = this.indexOfEx( search, offset, ret );
 		if ( i >= 0 ) {
 			ret.left = this.substr( 0, i );
 			ret.right = this.substr( i + ret.length );
@@ -160,19 +115,11 @@ Object.defineProperty( String.prototype, 'splitFirst', {
 } );
 
 
-
-
-/**
- * Splits a string on the last occurence of substring.
- * @def function String.splitLast ( search:string|RegExp )
- * @return {@see String.splitFirst()}
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 Object.defineProperty( String.prototype, 'splitLast', { 
-	value: function ( search ) {
+	value: function ( search, offset ) {
 
 		var ret = { left: this, right: undefined, length: 0 };
-		var i = this.lastIndexOfEx( search, undefined, ret );
+		var i = this.lastIndexOfEx( search, offset, ret );
 		if ( i >= 0 ) {
 			ret.left = this.substr( 0, i );
 			ret.right = this.substr( i + ret.length );
@@ -185,12 +132,6 @@ Object.defineProperty( String.prototype, 'splitLast', {
 
 
 
-
-/**
-@def bool function String.startsWith ( searchString:string, position:int = "0" )
-@param String to search for.
-@param Position in the string where to start the search.
-*/
 if ( String.prototype.startsWith === undefined ) {
 	Object.defineProperty( String.prototype, 'startsWith', {
 		enumerable: false,
@@ -205,17 +146,9 @@ if ( String.prototype.startsWith === undefined ) {
 		}
 	} );
 
-
-	
-
 }
 
 
-/**
-@def bool function String.endsWith ( searchString:string, position:int = "this.length" )
-@param String to search for.
-@param Treat the string as if it was this long.
-*/
 if ( String.prototype.endsWith === undefined ) {
 	Object.defineProperty( String.prototype, 'endsWith', {
 		enumerable: false,
@@ -230,18 +163,8 @@ if ( String.prototype.endsWith === undefined ) {
 			return this.slice( position - len, position ) === searchString;
 		}
 	} );
-
-
-	
-
 }
 
-
-/**
- * Counts the occurences of substring in a string.
- * @def function String.count ( search:string )
- * @author Borislav Peev <borislav.asdf@gmail.com>
- */
 Object.defineProperty( String.prototype, 'count', { 
 	value: function ( search ) {
 		var ret = 0;
@@ -254,19 +177,13 @@ Object.defineProperty( String.prototype, 'count', {
 } );
 
 
-/**
-Converts the first letter of the string to upper case and returns the new string.
-
-@def function String.toFirstUpperCase ()
-@return String
-@author Borislav Peev <borislav.asdf@gmail.com>
-*/
 Object.defineProperty( String.prototype, 'toFirstUpperCase', { 
 	value: function ( search ) {
 		return this[ 0 ].toUpperCase() + this.slice( 1 );
 	},
 	writable: true
 } );
+
 
 Object.defineProperty( String.prototype, 'contains', {
 	value: String.prototype.includes,
