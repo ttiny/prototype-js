@@ -18,7 +18,7 @@ npm install https://github.com/Perennials/prototype-js/tarball/master
 	- [.merge()](#merge)
 	- [.mergeDeep()](#mergedeep)
 	- [.duplicate()](#duplicate)
-	- [.filter()](#filter)
+	- [Object.filter()](#objectfilter)
 	- [.instanceof()](#instanceof)
 	- [Object.isObject()](#objectisobject)
 	- [Object.newArgs()](#objectnewargs)
@@ -79,7 +79,7 @@ Copies references of properties from another object to this one.
 ```
 
 ### .mergeDeep()
-Copies references of properties from another object to this one recusively.
+Copies references of properties from another object to this one recursively.
 If a property of this object that is not an `Object` is found in the object
 to be merged with, the property will be replaced.
 
@@ -99,17 +99,19 @@ reference.
 .duplicate() : Object;
 ```
 
-### .filter()
-Filters out all properties for which the callback is not true. This function
-will modify the object in place. While this behaviour is inconsistent, it is
-necassary for the function to be able to work on any object without knowledge
-how to construct a new instance of the object's class and copy its properties.
+### Object.filter()
+Filters out all properties out of `obj` for which the callback is not true.
+This function will modify the object in place. While this behaviour is
+inconsistent with `Array.filter()`, it is necessary for the function to be
+able to work on any object without knowledge how to construct a new instance
+of the object's class and copy its properties.
 
 ```js
-.filter(
+Object.filter(
+	obj:Object,
 	callback:function( value:any, key:String, object:Object ),
 	thisArg:mixed|undefined
-) : this;
+) : obj;
 ```
 
 ### .instanceof()
@@ -197,7 +199,7 @@ This is alias for `.concat()`.
 
 
 ### .unique()
-Returns a new array containing a uniqie set of the elements of the array.
+Returns a new array containing a unique set of the elements of the array.
 Meaning if some element appears twice it will be present only once in the
 resulting array. Items are compared with `===`.
 
@@ -258,7 +260,7 @@ Function
 
 ### .define()
 Defines properties in the prototype of the function. Each property will be
-added using `Object.defineProperty()`. The defined properties will be writable
+added using `Object.defineProperty()`. The defined properties will be writeable
 and non-enumerable.
 
 This function was meant for ES5 OOP syntax candy. It should not be used with ES6
@@ -295,8 +297,8 @@ if ( my.getSomething() === 5 ) {
 ```
 
 ### .extend()
-Will make functions's prototype to inherit from given parent's prototype and
-optionaly define some methods.
+Will make function's prototype to inherit from given parent's prototype and
+optionally define some methods.
 
 This function was meant for ES5 OOP syntax candy. It should not be used with ES6
 since ES6 has native class syntax.
@@ -346,7 +348,7 @@ if ( my.getSomething() === 5 ) {
 
 ### .static()
 Defines properties in the the function object itself. Each property will be
-added using `Object.defineProperty()`. The defined properties will be writable
+added using `Object.defineProperty()`. The defined properties will be writeable
 and non-enumerable.
 
 This function was meant for ES5 OOP syntax candy. ES6 has native syntax for static
@@ -383,7 +385,7 @@ if ( MyClass1.Something == MyClass2.Something ) {
 ```
 
 ### .implement()
-Enforeces that a class implements certain interface(s) and throws an `Error` if
+Enforces that a class implements certain interface(s) and throws an `Error` if
 it does not. This function also makes it possible to use
 [Object.instanceof()](#instanceof) to check if an object implements an
 interfaces. `.implement()` itself doesn't have runtime overhead - the implementation

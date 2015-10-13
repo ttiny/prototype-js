@@ -86,5 +86,5 @@ Unitest( 'Object.values()', function ( test ) {
 
 Unitest( 'Object.filter()', function ( test ) {
 
-	test.eq( { a: 1, b: 2, c: 3 }.filter( function ( val, key ) { return key != 'b' } ) , { a: 1, c: 3 } );
+	test.eq( Object.filter( { a: 1, b: 2, c: 3 }, function ( val, key ) { return key != 'b' } ) , { a: 1, c: 3 } );
 } );

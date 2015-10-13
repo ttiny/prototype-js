@@ -1,3 +1,6 @@
+### 1.10.0
+- Changed `Object.filter()` to `static` for conflicting with thirdparty modules.
+
 ### 1.9.0
 - Added `Array.indexOfEx()` and `Array.lastIndexOfEx()`.
 - Added `static RegExp.matchRecursive()`, `RegExp.pushIndex()`, `RegExp.popIndex()`, `RegExp.resetIndex()`.

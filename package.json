@@ -1,7 +1,7 @@
 {
 	"name": "Prototype",
 	"description": "Extensions to the JS stdlib",
-	"version": "1.9.0",
+	"version": "1.10.0",
 	"author": "Borislav Peev <borislav.asdf@gmail.com>",
 	"engine": [
 		"node >= 4.0.0"

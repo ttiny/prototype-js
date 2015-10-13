@@ -85,16 +85,16 @@ Object.defineProperty( Object, 'values', {
 } );
 
 
-Object.defineProperty( Object.prototype, 'filter', { 
-	value: function ( callback, thisArg ) {
-		var keys = Object.keys( this );
+Object.defineProperty( Object, 'filter', { 
+	value: function ( object, callback, thisArg ) {
+		var keys = Object.keys( object );
 		for ( var i = 0, iend = keys.length; i < iend; ++i ) {
 			var key = keys[i];
-			if ( callback.call( thisArg, this[ key ], key, this ) !== true ) {
-				delete this[ key ];
+			if ( callback.call( thisArg, object[ key ], key, object ) !== true ) {
+				delete object[ key ];
 			}
 		}
-		return this;
+		return object;
 	},
 	writable: true
 } );
