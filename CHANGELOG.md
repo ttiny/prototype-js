@@ -1,3 +1,7 @@
+### 1.11.0
+- Added `static Object.instanceof()`.
+- Small optimisations for `.instanceof()`.
+
 ### 1.10.0
 - Changed `Object.filter()` to `static` for conflicting with thirdparty modules.
 

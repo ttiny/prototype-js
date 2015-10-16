@@ -42,18 +42,19 @@ function ResolveMixins ( resolve ) {
 
 	var proto__implements = new WeakMap();
 	var obj_checkImplementation = function ( proto, clas ) {
-		if ( !proto__implements.has( proto ) ) {
-			return false;
-		}
-		
 		var __implements = proto__implements.get( proto );
-		for ( var i = __implements.length - 1; i >= 0; --i ) {
-			if ( clas === __implements[ i ] ) {
-				return true;
-			}
+		if ( __implements ) {
+			return __implements.indexOf( clas ) >= 0;
 		}
 		return false;
 	};
+
+	Object.defineProperty( Object, 'instanceof', {
+		value: function ( object, clas ) {
+			return object instanceof Object && object.instanceof( clas );
+		},
+		writable: true
+	} );
 
 	Object.defineProperty( Object.prototype, 'instanceof', {
 		value: function ( clas ) {
@@ -89,11 +90,11 @@ function ResolveMixins ( resolve ) {
 	};
 
 	var _markImplemented = function ( obj, proto ) {
-		if ( !proto__implements.has( obj.prototype ) ) {
-			proto__implements.set( obj.prototype, [] );
-		}
-		
 		var __implements = proto__implements.get( obj.prototype );
+		if ( __implements === undefined ) {
+			__implements = [];
+			proto__implements.set( obj.prototype, __implements );
+		}
 		do {
 			__implements.push( proto );
 			if ( proto.prototype === undefined ) {

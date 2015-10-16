@@ -252,7 +252,9 @@ Unitest( 'Function.implement/Object.instanceof', function ( test ) {
 	test( !caught );
 
 	test( (new A).instanceof( IFace2 ) );
+	test( Object.instanceof( new A, IFace2 ) );
 	test( (new A).instanceof( IFace1 ) );
+	test( !Object.instanceof( null, IFace1 ) );
 
 	var A = class { 
 		constructor () {}
